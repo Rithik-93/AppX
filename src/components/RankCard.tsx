@@ -47,18 +47,6 @@ export function RankCard({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white p-6">
-      {/* <ScoreCard
-        category={category}
-        name={fullName}
-        examDate={testDate}
-        examTime={testTime}
-        totalMarks={stats.totalMarks}
-        rawRank={ranks.overallRank}
-        subjectData={stats}
-        ref={scorecardRef}
-      //  normalizedMarks=0
-      //  normalizedMarks=0
-      /> */}
       <div className="mx-auto max-w-4xl space-y-6">
         <Card>
           <CardHeader>
@@ -168,53 +156,6 @@ export function RankCard({
             </div>
           </CardContent>
         </Card>
-        {/* <div>
-          <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-            <DialogTrigger asChild>
-              <Button variant="default" className="bg-purple-600 hover:bg-purple-700 text-white">
-                <Download className="mr-2 h-4 w-4" />
-                View Your Scorecard
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-3xl">
-              <div className="p-4">
-                {showScoreCard ? (
-                  <div ref={scorecardRef}>
-                    <ScoreCard
-                      category={category}
-                      name={fullName}
-                      examDate={testDate}
-                      examTime={testTime}
-                      totalMarks={stats.totalMarks}
-                      rawRank={ranks.overallRank}
-                      subjectData={stats}
-                    />
-                  </div>
-                ) : (
-                  <div className="text-center">
-                    <p className="mb-4">Click the button below to generate and download your scorecard.</p>
-                  </div>
-                )}
-                <div className="mt-4 flex justify-center">
-                  <Button
-                    onClick={() => {
-                      if (!showScoreCard) {
-                        setShowScoreCard(true);
-                      } else {
-                        downloadScorecard();
-                      }
-                    }}
-                    variant="default"
-                    className="bg-purple-600 hover:bg-purple-700 text-white"
-                  >
-                    <Download className="mr-2 h-4 w-4" />
-                    {showScoreCard ? 'Download Scorecard' : 'Generate Scorecard'}
-                  </Button>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div> */}
 
         <Card className="overflow-hidden">
           <CardHeader>
@@ -266,7 +207,7 @@ export function RankCard({
                   <DialogTitle className="text-lg font-semibold mb-4">Scorecard</DialogTitle>
                   <div className="p-4">
                     {showScoreCard ? (
-                      <div ref={scorecardRef}>
+                      <div ref={scorecardRef} className="flex justify-center items-center">
                         <ScoreCard
                           category={category}
                           name={fullName}
