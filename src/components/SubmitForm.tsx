@@ -25,7 +25,8 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
-import { RankCard, StudentProps } from "@/components/RankCard"
+import { RankCard } from "@/components/RankCard"
+import { StudentProps } from "@/app/types"
 
 const formSchema = z.object({
   answerKeyUrl: z.string().url().optional(),
@@ -108,7 +109,7 @@ export default function SubmitForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="general">UR</SelectItem>
+                            <SelectItem value="ur">UR</SelectItem>
                             <SelectItem value="obc">OBC</SelectItem>
                             <SelectItem value="ews">EWS</SelectItem>
                             <SelectItem value="sc">SC</SelectItem>

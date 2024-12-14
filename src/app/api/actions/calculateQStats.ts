@@ -1,4 +1,4 @@
-import { Question } from "../rank/route";
+import { Question } from "@/app/types";
 
 export function calculateQuestionStats(questions: Question[], totalMarks: number) {
 

@@ -1,5 +1,5 @@
+import { Question } from "@/app/types";
 import prisma from "../../../../prisma/src";
-import { Question } from "../rank/route";
 
 export const calculateMarks = (questions: Question[], positiveMarking: number, negativeMarking: number): number => {
   return questions.reduce((total, question) => {

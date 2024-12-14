@@ -1,24 +1,7 @@
+import { ScoreCardProps } from "@/app/types"
 import { Card } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { forwardRef } from "react"
-
-interface ScoreCardProps {
-    name: string
-    category: string
-    examDate: string
-    examTime: string
-    totalMarks: number
-    //   normalizedMarks: number
-    rawRank: number
-    //   normalizedRank: number
-    subjectData: {
-        attempted: number
-        notAttempted: number
-        correct: number
-        wrong: number
-        totalMarks: number
-    }
-}
 
 const DownloadCard = forwardRef<HTMLDivElement, ScoreCardProps>(({
     name,
@@ -35,14 +18,7 @@ const DownloadCard = forwardRef<HTMLDivElement, ScoreCardProps>(({
     subjectData.wrong = (subjectData.attempted + subjectData.notAttempted) - subjectData.correct
 
     return (
-        <Card ref={ref}
-            style={{
-                position: "absolute",
-                top: "-9999px",
-                left: "-9999px",
-                visibility: "hidden",
-            }}
-            className="w-[600px] p-6 space-y-6">
+        <Card ref={ref} className="w-[600px] p-6 space-y-6">
             <div className="text-purple-900 text-primary-foreground p-4 -mx-6 -mt-6 rounded-t-lg">
                 <h1 className="text-xl font-semibold">
                     ALP Stage 1 Scorecard
@@ -55,7 +31,7 @@ const DownloadCard = forwardRef<HTMLDivElement, ScoreCardProps>(({
                     { label: "Category", value: category },
                     { label: "Exam Date", value: examDate },
                     { label: "Exam Time", value: examTime },
-                    { label: "Total Marks", value: totalMarks },
+                    { label: "Total Marks", value: totalMarks.toFixed(2) },
                     { label: "Raw Rank", value: rawRank }
                 ].map((item, index) => (
                     <div key={index}>

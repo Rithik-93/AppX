@@ -7,19 +7,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-
-interface MarksAboveData {
-    marksAbove70: Record<string, number>;
-    marksAbove65: Record<string, number>;
-    marksAbove60: Record<string, number>;
-    marksAbove55: Record<string, number>;
-    marksAbove50: Record<string, number>;
-    marksAbove45: Record<string, number>;
-    marksAbove40: Record<string, number>;
-    marksAbove35: Record<string, number>;
-    marksAbove30: Record<string, number>;
-    marksAbove20: Record<string, number>;
-}
+import { MarksAboveData } from '@/app/types';
 
 export default function DynamicTopRankersTable({ data }: { data: MarksAboveData }) {
     const markRanges = Object.keys(data) as Array<keyof MarksAboveData>;

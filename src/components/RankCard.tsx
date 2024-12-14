@@ -3,63 +3,12 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Download } from 'lucide-react'
-import { JSX, useRef } from "react"
+import { JSX, useRef, useState } from "react"
 import { toPng } from "html-to-image"
 import TopRankers from "./TopRank"
 import ScoreCard from "./DownloadCard"
-
-export interface MarksAboveData {
-  marksAbove70: Record<string, number>;
-  marksAbove65: Record<string, number>;
-  marksAbove60: Record<string, number>;
-  marksAbove55: Record<string, number>;
-  marksAbove50: Record<string, number>;
-  marksAbove45: Record<string, number>;
-  marksAbove40: Record<string, number>;
-  marksAbove35: Record<string, number>;
-  marksAbove30: Record<string, number>;
-  marksAbove20: Record<string, number>;
-}
-
-export interface StudentProps {
-  fullName: string
-  category: string
-  testDate: string
-  testTime: string
-  rollNumber: string
-  subject: string
-  testCenter: string
-  ranks: {
-    overallRank: number
-    categoryRank: number
-    shiftRank: number
-  }
-  avgMarks: {
-    overallAverageMarks: {
-      _avg: {
-        totalMarks: number
-      }
-    },
-    categoryAverageMarks: {
-      _avg: {
-        totalMarks: number
-      }
-    },
-    shiftAverageMarks: {
-      _avg: {
-        totalMarks: number
-      }
-    }
-  }
-  stats: {
-    attempted: number
-    notAttempted: number
-    correct: number
-    wrong: number
-    totalMarks: number
-  },
-  topRankers: MarksAboveData
-}
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog"
+import { StudentProps } from "@/app/types"
 
 export function RankCard({
   fullName,
@@ -76,6 +25,7 @@ export function RankCard({
 }: StudentProps): JSX.Element {
 
   const scorecardRef = useRef<HTMLDivElement | null>(null)
+  const [showScoreCard, setShowScoreCard] = useState(false)
 
   const downloadScorecard = async () => {
     if (scorecardRef.current) {
@@ -97,7 +47,7 @@ export function RankCard({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white p-6">
-      <ScoreCard
+      {/* <ScoreCard
         category={category}
         name={fullName}
         examDate={testDate}
@@ -108,7 +58,7 @@ export function RankCard({
         ref={scorecardRef}
       //  normalizedMarks=0
       //  normalizedMarks=0
-      />
+      /> */}
       <div className="mx-auto max-w-4xl space-y-6">
         <Card>
           <CardHeader>
@@ -218,6 +168,53 @@ export function RankCard({
             </div>
           </CardContent>
         </Card>
+        {/* <div>
+          <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+            <DialogTrigger asChild>
+              <Button variant="default" className="bg-purple-600 hover:bg-purple-700 text-white">
+                <Download className="mr-2 h-4 w-4" />
+                View Your Scorecard
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-3xl">
+              <div className="p-4">
+                {showScoreCard ? (
+                  <div ref={scorecardRef}>
+                    <ScoreCard
+                      category={category}
+                      name={fullName}
+                      examDate={testDate}
+                      examTime={testTime}
+                      totalMarks={stats.totalMarks}
+                      rawRank={ranks.overallRank}
+                      subjectData={stats}
+                    />
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <p className="mb-4">Click the button below to generate and download your scorecard.</p>
+                  </div>
+                )}
+                <div className="mt-4 flex justify-center">
+                  <Button
+                    onClick={() => {
+                      if (!showScoreCard) {
+                        setShowScoreCard(true);
+                      } else {
+                        downloadScorecard();
+                      }
+                    }}
+                    variant="default"
+                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    {showScoreCard ? 'Download Scorecard' : 'Generate Scorecard'}
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div> */}
 
         <Card className="overflow-hidden">
           <CardHeader>
@@ -257,11 +254,53 @@ export function RankCard({
               </TableBody>
             </Table>
 
-            <div className="mt-4 flex justify-center">
-              <Button variant="default" onClick={downloadScorecard} className="bg-purple-600 hover:bg-purple-700 text-white">
-                <Download className="mr-2 h-4 w-4" />
-                Download Your Scorecard Again
-              </Button>
+            <div className="flex justify-center mt-4">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="default" className="bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center">
+                    <Download className="mr-2 h-4 w-4" />
+                    {showScoreCard ? 'Download Scorecard' : 'Generate Scorecard'}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-3xl">
+                  <DialogTitle className="text-lg font-semibold mb-4">Scorecard</DialogTitle>
+                  <div className="p-4">
+                    {showScoreCard ? (
+                      <div ref={scorecardRef}>
+                        <ScoreCard
+                          category={category}
+                          name={fullName}
+                          examDate={testDate}
+                          examTime={testTime}
+                          totalMarks={stats.totalMarks}
+                          rawRank={ranks.overallRank}
+                          subjectData={stats}
+                        />
+                      </div>
+                    ) : (
+                      <div className="text-center">
+                        <p className="mb-4">generate and download your scorecard.</p>
+                      </div>
+                    )}
+                    <div className="mt-4 flex justify-center">
+                      <Button
+                        onClick={() => {
+                          if (!showScoreCard) {
+                            setShowScoreCard(true)
+                          } else {
+                            downloadScorecard()
+                          }
+                        }}
+                        variant="default"
+                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                      >
+                        <Download className="mr-2 h-4 w-4" />
+                        {showScoreCard ? 'Download Scorecard' : 'Generate Scorecard'}
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
 
             <div className="mt-6 space-y-2 text-center">

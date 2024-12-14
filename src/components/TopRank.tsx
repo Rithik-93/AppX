@@ -1,4 +1,4 @@
-import { MarksAboveData } from './RankCard'
+import { MarksAboveData } from '@/app/types'
 import DynamicTopRankersTable from './TopRankers'
 
 export default function TopRankers({ data }: { data: MarksAboveData }) {

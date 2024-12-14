@@ -88,13 +88,10 @@
 import prisma from '../../../../prisma/src';
 
 export const getRankForUser = async (examId: string, rollNumber: string) => {
-  console.log(examId, rollNumber, "----------------------------------------------------");
 
   const userMarks = await prisma.examAttempt.findUnique({
     where: { rollNumber, examId },
   });
-  console.log(userMarks, "---------------------------------------------");
-
 
   if (!userMarks) {
     throw new Error('User exam attempt not found');
