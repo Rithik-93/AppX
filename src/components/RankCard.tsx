@@ -184,7 +184,7 @@ export function RankCard({
                   <TableCell className="text-right">{stats.wrong}</TableCell>
                   <TableCell className="text-right">{stats.totalMarks.toFixed(2)}</TableCell>
                 </TableRow>
-                <TableRow className="bg-gray-100 hover:bg-gray-200">
+                <TableRow className="bg-gray-100 hover:bg-gray-200 text-black">
                   <TableCell className="font-medium">Overall</TableCell>
                   <TableCell className="text-right">{stats.attempted}</TableCell>
                   <TableCell className="text-right">{stats.notAttempted}</TableCell>

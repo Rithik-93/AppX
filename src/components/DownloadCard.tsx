@@ -15,8 +15,6 @@ const DownloadCard = forwardRef<HTMLDivElement, ScoreCardProps>(({
     subjectData,
 }: ScoreCardProps, ref) => {
 
-    subjectData.wrong = (subjectData.attempted + subjectData.notAttempted) - subjectData.correct
-
     return (
         <Card ref={ref} className="w-[600px] p-6 space-y-6">
             <div className="text-purple-900 text-primary-foreground p-4 -mx-6 -mt-6 rounded-t-lg">

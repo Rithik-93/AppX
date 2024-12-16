@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const { answerKeyUrl, category, language } = body;
+    const { answerKeyUrl, category, language, horizontalCat } = body;
     if (!answerKeyUrl || !category || !language) {
       return NextResponse.json(
         {
@@ -163,6 +163,7 @@ export async function POST(req: NextRequest) {
         data: {
           language,
           category,
+          horizontalCategory: horizontalCat
         }
       });
 
@@ -234,8 +235,9 @@ export async function POST(req: NextRequest) {
           shiftTime: testTime,
           language,
           category,
-          attemptDate: testDate
-        },
+          attemptDate: testDate,
+          horizontalCategory: horizontalCat
+        }
       });
 
       await Promise.all(

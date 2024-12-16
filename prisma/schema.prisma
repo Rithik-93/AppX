@@ -75,19 +75,20 @@ model Answer {
 }
 
 model ExamAttempt {
-  id          String   @id @default(cuid())
-  userId      String?
-  examId      String
-  rollNumber  String   @unique
+  id                 String   @id @default(cuid())
+  userId             String?
+  examId             String
+  rollNumber         String   @unique
   // zone        String
-  language    String
-  category    String
-  shiftTime   String
-  attemptDate String
-  user        User?    @relation(fields: [userId], references: [id])
-  exam        Exam     @relation(fields: [examId], references: [id])
-  answers     Answer[]
-  totalMarks  Float
+  language           String
+  category           String
+  shiftTime          String
+  attemptDate        String
+  user               User?    @relation(fields: [userId], references: [id])
+  exam               Exam     @relation(fields: [examId], references: [id])
+  answers            Answer[]
+  totalMarks         Float
+  horizontalCategory String?
 
   @@unique([userId, examId])
 }
