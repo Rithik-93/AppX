@@ -124,7 +124,7 @@ export default function SubmitForm() {
                           </FormControl>
                           <SelectContent>
                             <SelectItem value={Areas.General}>General</SelectItem>
-                            <SelectItem value={Areas.NexalArea}>Nexal area</SelectItem>
+                            <SelectItem value={Areas.NexalArea}>Naxal area</SelectItem>
                             <SelectItem value={Areas.BoaderArea}>Border Area</SelectItem>
                           </SelectContent>
                         </Select>

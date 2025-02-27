@@ -77,9 +77,6 @@ export async function POST(req: NextRequest) {
     const testTime = examData.candidateInfo["Test Time"];
     const subject = examData.candidateInfo.Subject;
     const rollNumber = examData.candidateInfo["Roll Number"] || "N/A";
-
-    console.log(testCenter, testDate, testTime, subject, rollNumber);
-
     const extractQuestionData = (): Question[] => {
       const questions: Question[] = [];
 
@@ -118,7 +115,6 @@ export async function POST(req: NextRequest) {
     };
 
     examData.questions = extractQuestionData();
-    console.log("================================================");
 
     if (Object.keys(examData.candidateInfo).length === 0) {
       return NextResponse.json(

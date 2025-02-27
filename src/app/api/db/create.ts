@@ -6,7 +6,7 @@ async function main() {
   const baseExam = {
     name: "ALP Stage 1",
     negativeMarking: 0.25,
-    positiveMarking: 5,
+    positiveMarking: 2,
   };
 
   const dates = [
@@ -26,10 +26,11 @@ async function main() {
   const examsToCreate = [];
 
   for (const date of dates) {
+    const formattedDate = new Date(date).toLocaleDateString("en-GB");
     for (const shift of shifts) {
       examsToCreate.push({
         ...baseExam,
-        examDate: date,
+        examDate: formattedDate,
         shiftTime: shift,
       });
     }
