@@ -16,7 +16,11 @@ async function calculateNormalizedRanks(examId: string, domain?: string) {
     });
 
     if (!attempts || attempts.length === 0) {
-      console.error(`No attempts found for exam ${examId}${domain ? ` in domain ${domain}` : ''}`);
+      console.error(
+        `No attempts found for exam ${examId}${
+          domain ? ` in domain ${domain}` : ""
+        }`
+      );
       return [];
     }
 
@@ -101,14 +105,18 @@ async function calculateNormalizedRanks(examId: string, domain?: string) {
 
     // Check if we have valid shift statistics
     if (shiftStats.size === 0 || !maxMeanShift) {
-      console.error("Could not calculate shift statistics or find maximum mean shift");
+      console.error(
+        "Could not calculate shift statistics or find maximum mean shift"
+      );
       return [];
     }
 
     // Calculate Mqgm (mean of shift having maximum mean)
     const maxShiftStats = shiftStats.get(maxMeanShift);
     if (!maxShiftStats) {
-      console.error(`Could not find statistics for maximum mean shift: ${maxMeanShift}`);
+      console.error(
+        `Could not find statistics for maximum mean shift: ${maxMeanShift}`
+      );
       return [];
     }
     const Mqgm = maxShiftStats.mean;
@@ -117,13 +125,13 @@ async function calculateNormalizedRanks(examId: string, domain?: string) {
     const normalizedMarks = attempts.map((attempt) => {
       try {
         const { shiftTime, totalMarks, user } = attempt;
-        
+
         // Validate shift data exists
         const shiftData = shiftStats.get(shiftTime);
         if (!shiftData) {
           throw new Error(`No statistics found for shift: ${shiftTime}`);
         }
-        
+
         const { Mt, Miq } = shiftData;
         const category = user?.category || "GENERAL";
         const gender = user?.gender;
@@ -146,7 +154,9 @@ async function calculateNormalizedRanks(examId: string, domain?: string) {
 
         // Handle NaN or infinite values
         if (isNaN(normalizedMark) || !isFinite(normalizedMark)) {
-          console.warn(`Invalid normalized mark for user ${attempt.userId}: ${normalizedMark}`);
+          console.warn(
+            `Invalid normalized mark for user ${attempt.userId}: ${normalizedMark}`
+          );
           return {
             ...attempt,
             normalizedMark: totalMarks,
@@ -157,7 +167,8 @@ async function calculateNormalizedRanks(examId: string, domain?: string) {
         }
 
         // Round to 5 decimal places as specified
-        const roundedNormalizedMark = Math.round(normalizedMark * 100000) / 100000;
+        const roundedNormalizedMark =
+          Math.round(normalizedMark * 100000) / 100000;
 
         return {
           ...attempt,
@@ -167,7 +178,10 @@ async function calculateNormalizedRanks(examId: string, domain?: string) {
           area,
         };
       } catch (error) {
-        console.error(`Error normalizing marks for user ${attempt.userId}:`, error);
+        console.error(
+          `Error normalizing marks for user ${attempt.userId}:`,
+          error
+        );
         return {
           ...attempt,
           normalizedMark: attempt.totalMarks, // Fallback to original marks
@@ -194,9 +208,9 @@ async function calculateNormalizedRanks(examId: string, domain?: string) {
       normalizedMarks: attempt.normalizedMark,
       overallNormalizedRank: index + 1,
       categoryNormalizedRank: 0, // Will be filled in next step
-      shiftNormalizedRank: 0,    // Will be filled in next step
-      genderNormalizedRank: 0,   // Will be filled in separate function
-      areaNormalizedRank: 0,     // Will be filled in separate function
+      shiftNormalizedRank: 0, // Will be filled in next step
+      genderNormalizedRank: 0, // Will be filled in separate function
+      areaNormalizedRank: 0, // Will be filled in separate function
     }));
 
     // Calculate category-specific ranks
@@ -204,9 +218,9 @@ async function calculateNormalizedRanks(examId: string, domain?: string) {
     for (const result of rankedResults) {
       const { category } = result;
       if (!category) continue;
-      
+
       if (!categoryRanks.has(category)) categoryRanks.set(category, 1);
-      
+
       result.categoryNormalizedRank = categoryRanks.get(category)!;
       categoryRanks.set(category, categoryRanks.get(category)! + 1);
     }
@@ -216,9 +230,9 @@ async function calculateNormalizedRanks(examId: string, domain?: string) {
     for (const result of rankedResults) {
       const { shiftTime } = result;
       if (!shiftTime) continue;
-      
+
       if (!shiftRanks.has(shiftTime)) shiftRanks.set(shiftTime, 1);
-      
+
       result.shiftNormalizedRank = shiftRanks.get(shiftTime)!;
       shiftRanks.set(shiftTime, shiftRanks.get(shiftTime)! + 1);
     }
@@ -228,9 +242,9 @@ async function calculateNormalizedRanks(examId: string, domain?: string) {
     for (const result of rankedResults) {
       const { gender } = result;
       if (!gender) continue;
-      
+
       if (!genderRanks.has(gender)) genderRanks.set(gender, 1);
-      
+
       result.genderNormalizedRank = genderRanks.get(gender)!;
       genderRanks.set(gender, genderRanks.get(gender)! + 1);
     }
@@ -240,9 +254,9 @@ async function calculateNormalizedRanks(examId: string, domain?: string) {
     for (const result of rankedResults) {
       const { area } = result;
       if (!area) continue;
-      
+
       if (!areaRanks.has(area)) areaRanks.set(area, 1);
-      
+
       result.areaNormalizedRank = areaRanks.get(area)!;
       areaRanks.set(area, areaRanks.get(area)! + 1);
     }
@@ -255,46 +269,56 @@ async function calculateNormalizedRanks(examId: string, domain?: string) {
 }
 
 async function getUserNormalizedRanks(
-  examId: string, 
-  rollNumber: string, 
-  candidateGender: Gender, 
+  examId: string,
+  rollNumber: string,
+  candidateGender: Gender,
   candidateArea: Area,
-  domain: Domain 
+  domain: Domain
 ) {
   try {
     // First, calculate normalized ranks for all candidates
     const allNormalizedRanks = await calculateNormalizedRanks(examId, domain);
-    
+
     if (!allNormalizedRanks || allNormalizedRanks.length === 0) {
       console.error("No normalized ranks available");
       return null;
     }
-    
+
     // Find the specific user's ranks
     const userRanks = allNormalizedRanks.find(
-      rank => rank.rollNumber === rollNumber
+      (rank) => rank.rollNumber === rollNumber
     );
-    
+
     if (!userRanks) {
-      console.error(`User with roll number ${rollNumber} not found in exam ${examId}`);
+      console.error(
+        `User with roll number ${rollNumber} not found in exam ${examId}`
+      );
       return null;
     }
-    
+
     // For efficiency, we already calculated these ranks in the main function,
     // but if they weren't calculated or parameters were passed, we can calculate them here
     let genderRank = userRanks.genderNormalizedRank;
     let areaRank = userRanks.areaNormalizedRank;
-    
+
     // If gender was specified and doesn't match what we found, recalculate
     if (candidateGender && userRanks.gender !== candidateGender) {
-      genderRank = calculateGenderRank(allNormalizedRanks, rollNumber, candidateGender);
+      genderRank = calculateGenderRank(
+        allNormalizedRanks,
+        rollNumber,
+        candidateGender
+      );
     }
-    
+
     // If area was specified and doesn't match what we found, recalculate
     if (candidateArea && userRanks.area !== candidateArea) {
-      areaRank = calculateAreaRank(allNormalizedRanks, rollNumber, candidateArea);
+      areaRank = calculateAreaRank(
+        allNormalizedRanks,
+        rollNumber,
+        candidateArea
+      );
     }
-    
+
     return {
       userId: userRanks.userId,
       rollNumber,
@@ -310,8 +334,8 @@ async function getUserNormalizedRanks(
         category: userRanks.categoryNormalizedRank,
         shift: userRanks.shiftNormalizedRank,
         gender: genderRank,
-        area: areaRank
-      }
+        area: areaRank,
+      },
     };
   } catch (error) {
     console.error("Error retrieving user normalized ranks:", error);
@@ -320,28 +344,28 @@ async function getUserNormalizedRanks(
 }
 
 function calculateGenderRank(
-  allNormalizedRanks: any[], 
-  userRollNumber: string, 
+  allNormalizedRanks: any[],
+  userRollNumber: string,
   gender: Gender
 ): number {
   try {
     const sameGenderCandidates = allNormalizedRanks.filter(
-      rank => rank.gender === gender
+      (rank) => rank.gender === gender
     );
-    
+
     if (sameGenderCandidates.length === 0) {
       console.warn(`No candidates found with gender ${gender}`);
       return 0;
     }
-    
+
     // Sort by normalized marks
     sameGenderCandidates.sort((a, b) => b.normalizedMarks - a.normalizedMarks);
-    
+
     // Find user's position
     const position = sameGenderCandidates.findIndex(
-      rank => rank.rollNumber === userRollNumber
+      (rank) => rank.rollNumber === userRollNumber
     );
-    
+
     return position >= 0 ? position + 1 : 0;
   } catch (error) {
     console.error("Error calculating gender rank:", error);
@@ -350,29 +374,29 @@ function calculateGenderRank(
 }
 
 function calculateAreaRank(
-  allNormalizedRanks: any[], 
-  userRollNumber: string, 
+  allNormalizedRanks: any[],
+  userRollNumber: string,
   area: Area
 ): number {
   try {
     // Filter candidates by area
     const sameAreaCandidates = allNormalizedRanks.filter(
-      rank => rank.area === area
+      (rank) => rank.area === area
     );
-    
+
     if (sameAreaCandidates.length === 0) {
       console.warn(`No candidates found from area ${area}`);
       return 0;
     }
-    
+
     // Sort by normalized marks
     sameAreaCandidates.sort((a, b) => b.normalizedMarks - a.normalizedMarks);
-    
+
     // Find user's position
     const position = sameAreaCandidates.findIndex(
-      rank => rank.rollNumber === userRollNumber
+      (rank) => rank.rollNumber === userRollNumber
     );
-    
+
     return position >= 0 ? position + 1 : 0;
   } catch (error) {
     console.error("Error calculating area rank:", error);
@@ -397,27 +421,28 @@ async function main() {
     // Example 1: Get ranks for a specific user
     const userRanks = await getUserNormalizedRanks(
       "cm7muu0wk0000e1h8i9h51szg", // examId
-      "281241170410494",                    // rollNumber
-      "MALE" as Gender,            // gender (optional)
-      "GENERAL" as Area,            // area (optional)
-      "ROJGAR"                     // domain (optional)
+      "281241170410494", // rollNumber
+      "MALE" as Gender, // gender (optional)
+      "GENERAL" as Area, // area (optional)
+      "ROJGAR" // domain (optional)
     );
-    
+
     if (userRanks) {
       console.log("User normalized ranks:");
       console.error(userRanks.ranks.gender);
     } else {
       console.log("Failed to retrieve user normalized ranks");
     }
-    
+
     // Example 2: Calculate ranks for all candidates in an exam
     const allRanks = await calculateNormalizedRanks(
       "cm7muu0wk0000e1h8i9h51szg", // examId
-      "ROJGAR"                     // domain (optional)
+      "ROJGAR" // domain (optional)
     );
-    
-    console.log(`Calculated normalized ranks for ${allRanks.length} candidates`);
-    
+
+    console.log(
+      `Calculated normalized ranks for ${allRanks.length} candidates`
+    );
   } catch (error) {
     console.error("Error in main function:", error);
   } finally {
@@ -426,10 +451,7 @@ async function main() {
 }
 
 // Export functions for use in other modules
-export {
-  calculateNormalizedRanks,
-  getUserNormalizedRanks
-};
+export { calculateNormalizedRanks, getUserNormalizedRanks };
 
 // Uncomment to run the example:
 main();
