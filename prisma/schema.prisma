@@ -94,6 +94,7 @@ model ExamAttempt {
   totalMarks  Float
   gender      Gender
 
+  @@unique([rollNumber, domain])
   @@unique([userId, examId, domain])
 }
 
