@@ -6,23 +6,23 @@ export function Footer() {
     <footer className="bg-background border-t">
       <div className="container px-4 py-6 md:py-8">
         <nav className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-6">
-          <Link href="/privacy-policy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="/#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Privacy Policy
           </Link>
           <Separator className="hidden md:block h-4" orientation="vertical" />
-          <Link href="/terms-and-conditions" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="/#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Terms & Conditions
           </Link>
           <Separator className="hidden md:block h-4" orientation="vertical" />
-          <Link href="/disclaimer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="/#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Disclaimer
           </Link>
           <Separator className="hidden md:block h-4" orientation="vertical" />
-          <Link href="/refund-policy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="/#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Refund Policy
           </Link>
           <Separator className="hidden md:block h-4" orientation="vertical" />
-          <Link href="/contact-us" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="/#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Contact Us
           </Link>
         </nav>
