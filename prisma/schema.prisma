@@ -80,7 +80,7 @@ model ExamAttempt {
   id          String    @id @default(cuid())
   userId      String?
   examId      String
-  rollNumber  String    @unique
+  rollNumber  String
   language    Language?
   category    Category
   shiftTime   String
@@ -94,7 +94,7 @@ model ExamAttempt {
   totalMarks  Float
   gender      Gender
 
-  @@unique([userId, examId, domain])
+  @@unique([userId, examId, domain, rollNumber])
 }
 
 enum Language {
