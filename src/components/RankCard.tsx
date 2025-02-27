@@ -33,7 +33,7 @@ export function RankCard({
         const dataUrl = await toPng(scorecardRef.current, {
           quality: 1.0,
           backgroundColor: "white",
-          
+
         });
 
         const link = document.createElement("a");
@@ -125,8 +125,8 @@ export function RankCard({
                 </Card>
               </div>
 
-              <div className="flex justify-center gap-6">
-                <Card className="border-2 w-[33.33%]">
+              <div className="grid md:grid-cols-3 gap-6">
+                <Card className="border-2">
                   <CardHeader>
                     <CardTitle className="text-center text-sm font-medium text-gray-500">Gender Rank</CardTitle>
                   </CardHeader>
@@ -134,12 +134,20 @@ export function RankCard({
                     <p className="text-center text-2xl font-bold text-purple-900">{ranks.genderRank}</p>
                   </CardContent>
                 </Card>
-                <Card className="border-2 w-[33.33%]">
+                <Card className="border-2">
                   <CardHeader>
                     <CardTitle className="text-center text-sm font-medium text-gray-500">Area Rank</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-center text-2xl font-bold text-purple-900">{ranks.areaRank}</p>
+                  </CardContent>
+                </Card>
+                <Card className="border-2">
+                  <CardHeader>
+                    <CardTitle className="text-center text-sm font-medium text-gray-500">State Rank</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-center text-2xl font-bold text-purple-900">{ranks.stateRank}</p>
                   </CardContent>
                 </Card>
               </div>

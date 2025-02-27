@@ -84,6 +84,7 @@ model ExamAttempt {
   language    Language?
   category    Category
   shiftTime   String
+  state       States
   attemptDate String
   domain      Domain
   area        Area
@@ -113,6 +114,45 @@ enum Category {
   SC
   ST
   ExSM
+}
+
+enum States {
+  ANDHRAPRADESH
+  ARUNACHALPRADESH
+  ASSAM
+  BIHAR
+  CHHATTISGARH
+  GOA
+  GUJARAT
+  HARYANA
+  HIMACHALPRADESH
+  JHARKHAND
+  KARNATAKA
+  KERALA
+  MADHYAPRADESH
+  MAHARASHTRA
+  MANIPUR
+  MEGHALAYA
+  MIZORAM
+  NAGALAND
+  ODISHA
+  PUNJAB
+  RAJASTHAN
+  SIKKIM
+  TAMILNADU
+  TELANGANA
+  TRIPURA
+  UTTARPRADESH
+  UTTARAKHAND
+  WESTBENGAL
+  ANDAMAN_AND_NICOBAR_ISLANDS
+  CHANDIGARH
+  DADRA_AND_NAGAR_HAVELI_AND_DAMAN_AND_DIU
+  DELHI
+  LAKSHADWEEP
+  PUDUCHERRY
+  LADAKH
+  JAMMU_AND_KASHMIR
 }
 
 enum Area {

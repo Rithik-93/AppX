@@ -87,11 +87,12 @@
 import { domain } from "@/app/config/config";
 import prisma from "../../../../prisma/src";
 import { Domain } from "@prisma/client";
-import { Areas, Category, Gender } from "@/app/schema/types";
+import { Areas, Category, Gender, States } from "@/app/schema/types";
 
 export const getRankForUser = async (
   examId: string,
   rollNumber: string,
+  userState: States,
   CandidateGender: Gender,
   CandidatAerea: Areas
 ) => {
@@ -103,6 +104,7 @@ export const getRankForUser = async (
       rollNumber,
       examId,
       domain: domain as Domain,
+      state: userState
     },
   });
 
@@ -110,7 +112,7 @@ export const getRankForUser = async (
     throw new Error("User exam attempt not found");
   }
 
-  const { totalMarks, shiftTime, category, gender, area } = userMarks;
+  const { totalMarks, shiftTime, category, gender, area, state } = userMarks;
 
   const overallRank = await getOverallRank(examId, totalMarks);
   const shiftRank = await getShiftRank(examId, shiftTime, totalMarks);
@@ -122,6 +124,8 @@ export const getRankForUser = async (
   const genderRank = await getGenderRank(examId, gender as Gender, totalMarks);
 
   const areaRank = await getAreaRank(examId, area as Areas, totalMarks);
+
+  const stateRank = await getStateRank(examId, state as States, totalMarks)
 
   const overallCandidates = await prisma.examAttempt.count({
     where: {
@@ -137,6 +141,14 @@ export const getRankForUser = async (
       domain: domain as Domain,
     },
   });
+
+  const stateCandidates = await prisma.examAttempt.count({
+    where: {
+      examId,
+      state,
+      domain: domain as Domain
+    }
+  })
 
   const shiftCandidates = await prisma.examAttempt.count({
     where: {
@@ -168,6 +180,7 @@ export const getRankForUser = async (
     categoryRank: `${categoryRank.rank}/${categoryCandidates}`,
     genderRank: `${genderRank.rank}/${candidatesByGender}`,
     areaRank: `${areaRank.rank}/${candidatesByArea}`,
+    stateRank: `${stateRank.rank}/${stateCandidates}`
   };
 };
 
@@ -278,6 +291,29 @@ const getGenderRank = async (
 const getAreaRank = async (examId: string, area: Areas, userMarks: number) => {
   const scores = await prisma.examAttempt.findMany({
     where: { examId, area, domain: domain as Domain },
+    select: { userId: true, totalMarks: true },
+  });
+
+  const sortedScores = scores.sort((a, b) => b.totalMarks - a.totalMarks);
+
+  let rank = 1;
+  let currentRank = 1;
+  for (let i = 0; i < sortedScores.length; i++) {
+    if (i > 0 && sortedScores[i].totalMarks < sortedScores[i - 1].totalMarks) {
+      currentRank = i + 1;
+    }
+    if (sortedScores[i].totalMarks === userMarks) {
+      rank = currentRank;
+      break;
+    }
+  }
+
+  return { rank };
+};
+
+const getStateRank = async (examId: string, state: States, userMarks: number) => {
+  const scores = await prisma.examAttempt.findMany({
+    where: { examId, state, domain: domain as Domain },
     select: { userId: true, totalMarks: true },
   });
 

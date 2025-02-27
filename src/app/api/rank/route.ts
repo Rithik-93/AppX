@@ -32,8 +32,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { answerKeyUrl, category, area, gender } = data.data;
-    console.log(answerKeyUrl, category, area, gender);
+    const { answerKeyUrl, category, area, gender, state } = data.data;
+    console.log(answerKeyUrl, category, area, gender, state);
 
     let response;
 
@@ -80,6 +80,9 @@ export async function POST(req: NextRequest) {
     const rollNumber = examData.candidateInfo["Roll Number"] || "N/A";
     const extractQuestionData = (): Question[] => {
       const questions: Question[] = [];
+
+      console.error(testDate, testTime, );
+      
 
       const questionPanels = $(
         ".question-pnl, .question-panel, .exam-question, table.questions"
@@ -167,6 +170,7 @@ export async function POST(req: NextRequest) {
           domain: domain as Domain,
         },
         data: {
+          state,
           category: category,
           gender: gender,
           totalMarks,
@@ -264,6 +268,7 @@ export async function POST(req: NextRequest) {
           exam,
           examData,
           totalMarks,
+          state,
           testTime,
           category,
           domain as Domain,
@@ -318,7 +323,14 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const userRank = await getRankForUser(exam.id, rollNumber, gender, area);
+    const userRank = await getRankForUser(
+      exam.id,
+      rollNumber,
+      state,
+      gender,
+      area
+    );
+
     const avgMarks = await getAverageMarks(
       exam.id,
       category,
@@ -326,10 +338,12 @@ export async function POST(req: NextRequest) {
       gender,
       area
     );
+
     const questionStats = calculateQuestionStats(
       examData.questions,
       totalMarks
     );
+
     const topRankers = await getMarksAboveInfo();
 
     const userNormalisedRank = await getUserNormalizedRanks(
@@ -357,9 +371,10 @@ export async function POST(req: NextRequest) {
             shiftRank: userRank.shiftRank,
             genderRank: userRank.genderRank,
             areaRank: userRank.areaRank,
+            stateRank: userRank.stateRank,
             overAllNormalisedRank: userNormalisedRank?.ranks.overall,
             categoryNormalisedRank: userNormalisedRank?.ranks.category,
-            shiftNormalisedRank: userNormalisedRank?.ranks.shift
+            shiftNormalisedRank: userNormalisedRank?.ranks.shift,
           },
           avgMarks,
           stats: {
@@ -390,9 +405,10 @@ export async function POST(req: NextRequest) {
         shiftRank: userRank.shiftRank,
         genderRank: userRank.genderRank,
         areaRank: userRank.areaRank,
+        stateRank: userRank.stateRank,
         overAllNormalisedRank: userNormalisedRank?.ranks.overall,
         categoryNormalisedRank: userNormalisedRank?.ranks.category,
-        shiftNormalisedRank: userNormalisedRank?.ranks.shift
+        shiftNormalisedRank: userNormalisedRank?.ranks.shift,
       },
       avgMarks,
       stats: {

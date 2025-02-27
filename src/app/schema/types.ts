@@ -24,6 +24,46 @@ export enum Languages {
   Hindi = "HINDI",
 }
 
+export enum States {
+  ANDHRAPRADESH = "ANDHRAPRADESH",
+  ARUNACHALPRADESH = "ARUNACHALPRADESH",
+  ASSAM = "ASSAM",
+  BIHAR = "BIHAR",
+  CHHATTISGARH = "CHHATTISGARH",
+  GOA = "GOA",
+  GUJARAT = "GUJARAT",
+  HARYANA = "HARYANA",
+  HIMACHALPRADESH = "HIMACHALPRADESH",
+  JHARKHAND = "JHARKHAND",
+  KARNATAKA = "KARNATAKA",
+  KERALA = "KERALA",
+  MADHYAPRADESH = "MADHYAPRADESH",
+  MAHARASHTRA = "MAHARASHTRA",
+  MANIPUR = "MANIPUR",
+  MEGHALAYA = "MEGHALAYA",
+  MIZORAM = "MIZORAM",
+  NAGALAND = "NAGALAND",
+  ODISHA = "ODISHA",
+  PUNJAB = "PUNJAB",
+  RAJASTHAN = "RAJASTHAN",
+  SIKKIM = "SIKKIM",
+  TAMILNADU = "TAMILNADU",
+  TELANGANA = "TELANGANA",
+  TRIPURA = "TRIPURA",
+  UTTARPRADESH = "UTTARPRADESH",
+  UTTARAKHAND = "UTTARAKHAND",
+  WESTBENGAL = "WESTBENGAL",
+  ANDAMAN_AND_NICOBAR_ISLANDS = "ANDAMAN_AND_NICOBAR_ISLANDS",
+  CHANDIGARH = "CHANDIGARH",
+  DADRA_AND_NAGAR_HAVELI_AND_DAMAN_AND_DIU = "DADRA_AND_NAGAR_HAVELI_AND_DAMAN_AND_DIU",
+  DELHI = "DELHI",
+  LAKSHADWEEP = "LAKSHADWEEP",
+  PUDUCHERRY = "PUDUCHERRY",
+  LADAKH = "LADAKH",
+  JAMMU_AND_KASHMIR = "JAMMU_AND_KASHMIR"
+}
+
+
 export enum Areas {
   General = "GENERAL",
   NexalArea = "NEXALAREA",
@@ -44,6 +84,7 @@ export const FormSchema = z.object({
   answerKeyUrl: z.string().url(),
   category: z.nativeEnum(Category),
   area: z.nativeEnum(Areas),
+  state: z.nativeEnum(States),
   gender: z.nativeEnum(Gender),
 });
 
@@ -109,6 +150,7 @@ export interface StudentProps {
     shiftRank: string;
     genderRank: string;
     areaRank: string;
+    stateRank: string;
     overAllNormalisedRank: number,
     categoryNormalisedRank: number,
     shiftNormalisedRank: number

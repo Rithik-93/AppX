@@ -26,7 +26,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 import { RankCard } from "@/components/RankCard"
-import { Areas, Category, FormSchema, Gender, StudentProps } from "@/app/schema/types"
+import { Areas, Category, FormSchema, Gender, States, StudentProps } from "@/app/schema/types"
 
 export default function SubmitForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,10 +47,11 @@ export default function SubmitForm() {
         answerKeyUrl: values.answerKeyUrl,
         category: values.category,
         gender: values.gender,
-        area: values.area
+        area: values.area,
+        state: values.state
       });
       setExamData(data.data)
-      console.log(JSON.stringify(data.data,null,2));
+      console.log(JSON.stringify(data.data, null, 2));
       toast.success("Submitted successfully!");
     } catch (error) {
       console.error(error);
@@ -152,6 +153,64 @@ export default function SubmitForm() {
                       </FormItem>
                     )}
                   />
+                  <FormField
+                    control={form.control}
+                    name="state"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>State</FormLabel>
+                        <Select required onValueChange={field.onChange}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select State" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value={States.ARUNACHALPRADESH}>Arunachal Pradesh</SelectItem>
+                            <SelectItem value={States.ASSAM}>Assam</SelectItem>
+                            <SelectItem value={States.BIHAR}>Bihar</SelectItem>
+                            <SelectItem value={States.CHHATTISGARH}>Chhattisgarh</SelectItem>
+                            <SelectItem value={States.GOA}>Goa</SelectItem>
+                            <SelectItem value={States.GUJARAT}>Gujarat</SelectItem>
+                            <SelectItem value={States.HARYANA}>Haryana</SelectItem>
+                            <SelectItem value={States.HIMACHALPRADESH}>Himachal Pradesh</SelectItem>
+                            <SelectItem value={States.JHARKHAND}>Jharkhand</SelectItem>
+                            <SelectItem value={States.KARNATAKA}>Karnataka</SelectItem>
+                            <SelectItem value={States.KERALA}>Kerala</SelectItem>
+                            <SelectItem value={States.MADHYAPRADESH}>Madhya Pradesh</SelectItem>
+                            <SelectItem value={States.MAHARASHTRA}>Maharashtra</SelectItem>
+                            <SelectItem value={States.MANIPUR}>Manipur</SelectItem>
+                            <SelectItem value={States.MEGHALAYA}>Meghalaya</SelectItem>
+                            <SelectItem value={States.MIZORAM}>Mizoram</SelectItem>
+                            <SelectItem value={States.NAGALAND}>Nagaland</SelectItem>
+                            <SelectItem value={States.ODISHA}>Odisha</SelectItem>
+                            <SelectItem value={States.PUNJAB}>Punjab</SelectItem>
+                            <SelectItem value={States.RAJASTHAN}>Rajasthan</SelectItem>
+                            <SelectItem value={States.SIKKIM}>Sikkim</SelectItem>
+                            <SelectItem value={States.TAMILNADU}>Tamil Nadu</SelectItem>
+                            <SelectItem value={States.TELANGANA}>Telangana</SelectItem>
+                            <SelectItem value={States.ANDHRAPRADESH}>Andhra Pradesh</SelectItem>
+                            <SelectItem value={States.TRIPURA}>Tripura</SelectItem>
+                            <SelectItem value={States.UTTARPRADESH}>Uttar Pradesh</SelectItem>
+                            <SelectItem value={States.UTTARAKHAND}>Uttarakhand</SelectItem>
+                            <SelectItem value={States.WESTBENGAL}>West Bengal</SelectItem>
+                            <SelectItem value={States.ANDAMAN_AND_NICOBAR_ISLANDS}>Andaman and Nicobar Islands</SelectItem>
+                            <SelectItem value={States.CHANDIGARH}>Chandigarh</SelectItem>
+                            <SelectItem value={States.DELHI}>Delhi</SelectItem>
+                            <SelectItem value={States.LAKSHADWEEP}>Lakshadweep</SelectItem>
+                            <SelectItem value={States.PUDUCHERRY}>Puducherry</SelectItem>
+                            <SelectItem value={States.LADAKH}>Ladakh</SelectItem>
+                            <SelectItem value={States.JAMMU_AND_KASHMIR}>Jammu and Kashmir</SelectItem>
+                            <SelectItem value={States.DADRA_AND_NAGAR_HAVELI_AND_DAMAN_AND_DIU}>
+                              Dadra and Nagar Haveli and Daman and Diu
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                 </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? (
