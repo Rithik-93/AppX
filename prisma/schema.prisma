@@ -77,18 +77,18 @@ model Answer {
 }
 
 model ExamAttempt {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   userId      String?
   examId      String
-  rollNumber  String   @unique
-  language    Language
+  rollNumber  String    @unique
+  language    Language?
   category    Category
   shiftTime   String
   attemptDate String
   domain      Domain
   area        Area
-  user        User?    @relation(fields: [userId], references: [id])
-  exam        Exam     @relation(fields: [examId], references: [id])
+  user        User?     @relation(fields: [userId], references: [id])
+  exam        Exam      @relation(fields: [examId], references: [id])
   answers     Answer[]
   totalMarks  Float
   gender      Gender

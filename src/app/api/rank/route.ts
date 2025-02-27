@@ -32,8 +32,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { answerKeyUrl, category, language, area, gender } = data.data;
-    console.log(answerKeyUrl, category, language, area, gender);
+    const { answerKeyUrl, category, area, gender } = data.data;
+    console.log(answerKeyUrl, category, area, gender);
 
     let response;
 
@@ -167,7 +167,6 @@ export async function POST(req: NextRequest) {
           domain: domain as Domain,
         },
         data: {
-          language: language,
           category: category,
           gender: gender,
           totalMarks,
@@ -266,7 +265,6 @@ export async function POST(req: NextRequest) {
           examData,
           totalMarks,
           testTime,
-          language,
           category,
           domain as Domain,
           testDate,

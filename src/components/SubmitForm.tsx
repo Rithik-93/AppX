@@ -26,7 +26,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 import { RankCard } from "@/components/RankCard"
-import { Areas, Category, FormSchema, Gender, Languages, StudentProps } from "@/app/schema/types"
+import { Areas, Category, FormSchema, Gender, StudentProps } from "@/app/schema/types"
 
 export default function SubmitForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,8 +47,7 @@ export default function SubmitForm() {
         answerKeyUrl: values.answerKeyUrl,
         category: values.category,
         gender: values.gender,
-        area: values.area,
-        language: values.language
+        area: values.area
       });
       setExamData(data.data)
       console.log(JSON.stringify(data.data,null,2));
@@ -126,27 +125,6 @@ export default function SubmitForm() {
                             <SelectItem value={Areas.General}>General</SelectItem>
                             <SelectItem value={Areas.NexalArea}>Naxal area</SelectItem>
                             <SelectItem value={Areas.BoaderArea}>Border Area</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="language"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Paper Language</FormLabel>
-                        <Select required onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select language" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value={Languages.English.toString()}>English</SelectItem>
-                            <SelectItem value={Languages.Hindi.toString()}>Hindi</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

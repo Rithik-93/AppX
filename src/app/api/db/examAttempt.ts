@@ -3,7 +3,6 @@ import {
   Category,
   ExamData,
   Gender,
-  Languages,
 } from "@/app/schema/types";
 import prisma from "../../../../prisma/src";
 import { Domain, Exam, User } from "@prisma/client";
@@ -30,7 +29,6 @@ export async function createAttempt(
   examData: ExamData,
   totalMarks: number,
   testTime: string,
-  language: Languages,
   category: Category,
   domain: Domain,
   testDate: string,
@@ -44,7 +42,6 @@ export async function createAttempt(
       rollNumber: examData.candidateInfo["Roll Number"] || "N/A",
       totalMarks,
       shiftTime: testTime,
-      language: language,
       category: category,
       domain: domain as Domain,
       attemptDate: testDate,

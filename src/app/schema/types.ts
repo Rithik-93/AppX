@@ -43,7 +43,6 @@ export enum Gender {
 export const FormSchema = z.object({
   answerKeyUrl: z.string().url(),
   category: z.nativeEnum(Category),
-  language: z.nativeEnum(Languages),
   area: z.nativeEnum(Areas),
   gender: z.nativeEnum(Gender),
 });
