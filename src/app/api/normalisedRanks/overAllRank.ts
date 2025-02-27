@@ -1,3 +1,5 @@
+'use server'
+
 import { Domain, ExamAttempt, Gender, Area } from "@prisma/client";
 import prisma from "../../../../prisma/src";
 

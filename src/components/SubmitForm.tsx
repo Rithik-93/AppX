@@ -162,7 +162,7 @@ export default function SubmitForm() {
                         <Select required onValueChange={field.onChange}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="gender" />
+                              <SelectValue placeholder="Gender" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
