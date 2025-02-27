@@ -1,4 +1,4 @@
-import { Domain, ExamAttempt, PrismaClient, Gender, Area } from "@prisma/client";
+import { Domain, ExamAttempt, Gender, Area } from "@prisma/client";
 import prisma from "../../../../prisma/src";
 
 async function calculateNormalizedRanks(examId: string, domain?: string) {
