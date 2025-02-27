@@ -418,42 +418,4 @@ function stdDev(arr: number[], meanValue: number) {
   return Math.sqrt(variance);
 }
 
-async function main() {
-  try {
-    // Example 1: Get ranks for a specific user
-    const userRanks = await getUserNormalizedRanks(
-      "cm7muu0wk0000e1h8i9h51szg", // examId
-      "281241170410494", // rollNumber
-      "MALE" as Gender, // gender (optional)
-      "GENERAL" as Area, // area (optional)
-      "ROJGAR" // domain (optional)
-    );
-
-    if (userRanks) {
-      console.log("User normalized ranks:");
-      console.error(userRanks.ranks.gender);
-    } else {
-      console.log("Failed to retrieve user normalized ranks");
-    }
-
-    // Example 2: Calculate ranks for all candidates in an exam
-    const allRanks = await calculateNormalizedRanks(
-      "cm7muu0wk0000e1h8i9h51szg", // examId
-      "ROJGAR" // domain (optional)
-    );
-
-    console.log(
-      `Calculated normalized ranks for ${allRanks.length} candidates`
-    );
-  } catch (error) {
-    console.error("Error in main function:", error);
-  } finally {
-    await prisma.$disconnect();
-  }
-}
-
-// Export functions for use in other modules
 export { calculateNormalizedRanks, getUserNormalizedRanks };
-
-// Uncomment to run the example:
-main();

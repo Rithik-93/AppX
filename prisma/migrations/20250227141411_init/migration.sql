@@ -8,6 +8,9 @@ CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE');
 CREATE TYPE "Category" AS ENUM ('UR', 'EWS', 'OBC', 'SC', 'ST', 'ExSM');
 
 -- CreateEnum
+CREATE TYPE "States" AS ENUM ('ANDHRAPRADESH', 'ARUNACHALPRADESH', 'ASSAM', 'BIHAR', 'CHHATTISGARH', 'GOA', 'GUJARAT', 'HARYANA', 'HIMACHALPRADESH', 'JHARKHAND', 'KARNATAKA', 'KERALA', 'MADHYAPRADESH', 'MAHARASHTRA', 'MANIPUR', 'MEGHALAYA', 'MIZORAM', 'NAGALAND', 'ODISHA', 'PUNJAB', 'RAJASTHAN', 'SIKKIM', 'TAMILNADU', 'TELANGANA', 'TRIPURA', 'UTTARPRADESH', 'UTTARAKHAND', 'WESTBENGAL', 'ANDAMAN_AND_NICOBAR_ISLANDS', 'CHANDIGARH', 'DADRA_AND_NAGAR_HAVELI_AND_DAMAN_AND_DIU', 'DELHI', 'LAKSHADWEEP', 'PUDUCHERRY', 'LADAKH', 'JAMMU_AND_KASHMIR');
+
+-- CreateEnum
 CREATE TYPE "Area" AS ENUM ('GENERAL', 'NEXALAREA', 'BORDERAREA');
 
 -- CreateEnum
@@ -20,6 +23,8 @@ CREATE TABLE "User" (
     "email" TEXT,
     "domain" "Domain" NOT NULL,
     "category" "Category" NOT NULL,
+    "area" "Area" NOT NULL,
+    "gender" "Gender" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -77,9 +82,10 @@ CREATE TABLE "ExamAttempt" (
     "userId" TEXT,
     "examId" TEXT NOT NULL,
     "rollNumber" TEXT NOT NULL,
-    "language" "Language" NOT NULL,
+    "language" "Language",
     "category" "Category" NOT NULL,
     "shiftTime" TEXT NOT NULL,
+    "state" "States" NOT NULL,
     "attemptDate" TEXT NOT NULL,
     "domain" "Domain" NOT NULL,
     "area" "Area" NOT NULL,
