@@ -267,17 +267,6 @@ export function RankCard({
               </Dialog>
             </div>
 
-            <div className="mt-6 space-y-2 text-center">
-              <p className="text-sm">
-                <span className="font-medium text-gray-500">Bonus Marks:</span>{" "}
-                <span className="text-purple-600 font-semibold">+0</span>
-              </p>
-              <p className="text-sm">
-                <span className="font-medium text-gray-500">Normalised Marks:</span>{" "}
-                <span className="font-semibold text-gray-900">--</span>
-              </p>
-            </div>
-
             <div className="mt-6">
               <div className="bg-purple-600 text-white py-3 px-4 rounded-lg text-center font-medium">
                 Your Normalised Rank
