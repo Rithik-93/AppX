@@ -3,13 +3,10 @@
 import { Domain, ExamAttempt, Gender, Area } from "@prisma/client";
 import prisma from "../../../../prisma/src";
 
-async function calculateNormalizedRanks(examId: string, domain?: string) {
+async function calculateNormalizedRanks(examId: string, domain: string) {
   try {
     // Build the query conditions
-    const whereCondition: any = { examId };
-    if (domain) {
-      whereCondition.domain = domain as Domain;
-    }
+    const whereCondition: any = { examId, domain };
 
     const attempts = await prisma.examAttempt.findMany({
       where: whereCondition,
