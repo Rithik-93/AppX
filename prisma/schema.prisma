@@ -18,7 +18,10 @@ model User {
   id           String        @id @default(cuid())
   name         String
   email        String?
-  category     String
+  domain       Domain
+  category     Category
+  area         Area
+  gender       Gender
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   examAttempts ExamAttempt[]
@@ -53,7 +56,6 @@ model Rank {
   id           String @id @default(cuid())
   userId       String
   examId       String
-  // zoneRank     Int
   categoryRank Int
   overallRank  Int
   user         User   @relation(fields: [userId], references: [id])
@@ -75,20 +77,51 @@ model Answer {
 }
 
 model ExamAttempt {
-  id                 String   @id @default(cuid())
-  userId             String?
-  examId             String
-  rollNumber         String   @unique
-  // zone        String
-  language           String
-  category           String
-  shiftTime          String
-  attemptDate        String
-  user               User?    @relation(fields: [userId], references: [id])
-  exam               Exam     @relation(fields: [examId], references: [id])
-  answers            Answer[]
-  totalMarks         Float
-  horizontalCategory String?
+  id          String   @id @default(cuid())
+  userId      String?
+  examId      String
+  rollNumber  String   @unique
+  language    Language
+  category    Category
+  shiftTime   String
+  attemptDate String
+  domain      Domain
+  area        Area
+  user        User?    @relation(fields: [userId], references: [id])
+  exam        Exam     @relation(fields: [examId], references: [id])
+  answers     Answer[]
+  totalMarks  Float
+  gender      Gender
 
-  @@unique([userId, examId])
+  @@unique([userId, examId, domain])
+}
+
+enum Language {
+  ENGLISH
+  HINDI
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Category {
+  UR
+  EWS
+  OBC
+  SC
+  ST
+  ExSM
+}
+
+enum Area {
+  GENERAL
+  NEXALAREA
+  BORDERAREA
+}
+
+enum Domain {
+  ROJGAR
+  SCIENCEMAGNET
 }

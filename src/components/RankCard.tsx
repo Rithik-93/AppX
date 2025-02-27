@@ -8,7 +8,7 @@ import { toPng } from "html-to-image"
 import TopRankers from "./TopRank"
 import ScoreCard from "./DownloadCard"
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog"
-import { StudentProps } from "@/app/types"
+import { StudentProps } from "@/app/schema/types"
 
 export function RankCard({
   fullName,

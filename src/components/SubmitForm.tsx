@@ -26,43 +26,32 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 import { RankCard } from "@/components/RankCard"
-import { StudentProps } from "@/app/types"
-
-const formSchema = z.object({
-  answerKeyUrl: z.string().url().optional(),
-  horizontalCat: z.string().optional(),
-  category: z.string(),
-  language: z.string(),
-  password: z.string().optional(),
-})
+import { Areas, Category, FormSchema, Gender, Languages, StudentProps } from "@/app/schema/types"
 
 export default function SubmitForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [examData, setExamData] = useState<StudentProps | null>(null);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
     defaultValues: {
-      answerKeyUrl: "",
-      horizontalCat: "",
-      category: "",
-      language: "",
-      password: ""
+      answerKeyUrl: ""
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     console.log("i got submitted ")
     setIsLoading(true);
     try {
       const data = await axios.post(`/api/rank`, {
         answerKeyUrl: values.answerKeyUrl,
         category: values.category,
-        password: values.password,
-        horizontalCat: values.horizontalCat,
+        gender: values.gender,
+        area: values.area,
         language: values.language
       });
       setExamData(data.data)
+      console.log(JSON.stringify(data.data,null,2));
       toast.success("Submitted successfully!");
     } catch (error) {
       console.error(error);
@@ -109,11 +98,12 @@ export default function SubmitForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="ur">UR</SelectItem>
-                            <SelectItem value="obc">OBC</SelectItem>
-                            <SelectItem value="ews">EWS</SelectItem>
-                            <SelectItem value="sc">SC</SelectItem>
-                            <SelectItem value="st">ST</SelectItem>
+                            <SelectItem value={Category.UR}>UR</SelectItem>
+                            <SelectItem value={Category.OBC}>OBC</SelectItem>
+                            <SelectItem value={Category.EWS}>EWS</SelectItem>
+                            <SelectItem value={Category.SC}>SC</SelectItem>
+                            <SelectItem value={Category.ST}>ST</SelectItem>
+                            <SelectItem value={Category.ExSM}>EX SM</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -122,10 +112,10 @@ export default function SubmitForm() {
                   />
                   <FormField
                     control={form.control}
-                    name="horizontalCat"
+                    name="area"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Horizontal Cat.</FormLabel>
+                        <FormLabel>Area</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
@@ -133,12 +123,9 @@ export default function SubmitForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                          <SelectItem value="NONE">none</SelectItem>
-                            <SelectItem value="EX SM">EX SM</SelectItem>
-                            <SelectItem value="OH">OH</SelectItem>
-                            <SelectItem value="VH">VH</SelectItem>
-                            <SelectItem value="HH">HH</SelectItem>
-                            <SelectItem value="OTHER PWD">OTHER PWD</SelectItem>
+                            <SelectItem value={Areas.General}>General</SelectItem>
+                            <SelectItem value={Areas.NexalArea}>Nexal area</SelectItem>
+                            <SelectItem value={Areas.BoaderArea}>Border Area</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -158,21 +145,8 @@ export default function SubmitForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="english">English</SelectItem>
-                            <SelectItem value="hindi">Hindi</SelectItem>
-                            <SelectItem value="bengali">Bengali</SelectItem>
-                            <SelectItem value="assamese">Assamese</SelectItem>
-                            <SelectItem value="gujarati">Gujarati</SelectItem>
-                            <SelectItem value="kannada">Kannada</SelectItem>
-                            <SelectItem value="tamil">Tamil</SelectItem>
-                            <SelectItem value="konkani">Konkani</SelectItem>
-                            <SelectItem value="malayalam">Malayalam</SelectItem>
-                            <SelectItem value="manipuri">Manipuri</SelectItem>
-                            <SelectItem value="marathi">Marathi</SelectItem>
-                            <SelectItem value="odiya">Odiya</SelectItem>
-                            <SelectItem value="punjabi">Punjabi</SelectItem>
-                            <SelectItem value="telugu">Telugu</SelectItem>
-                            <SelectItem value="urdu">Urdu</SelectItem>
+                            <SelectItem value={Languages.English.toString()}>English</SelectItem>
+                            <SelectItem value={Languages.Hindi.toString()}>Hindi</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -181,13 +155,21 @@ export default function SubmitForm() {
                   />
                   <FormField
                     control={form.control}
-                    name="password"
+                    name="gender"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Password(optional)</FormLabel>
-                        <FormControl>
-                          <Input type="password" {...field} />
-                        </FormControl>
+                        <FormLabel>Gender</FormLabel>
+                        <Select required onValueChange={field.onChange}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="gender" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value={Gender.MALE}>Male</SelectItem>
+                            <SelectItem value={Gender.FEMALE}>Female</SelectItem>
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}

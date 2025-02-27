@@ -7,7 +7,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { MarksAboveData } from '@/app/types';
+import { MarksAboveData } from '@/app/schema/types';
 
 export default function DynamicTopRankersTable({ data }: { data: MarksAboveData }) {
     const markRanges = Object.keys(data) as Array<keyof MarksAboveData>;

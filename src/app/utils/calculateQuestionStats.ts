@@ -1,4 +1,4 @@
-import { Question } from "@/app/types";
+import { Question } from "../schema/types";
 
 export function calculateQuestionStats(questions: Question[], totalMarks: number) {
 

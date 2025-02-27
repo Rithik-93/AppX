@@ -1,6 +1,52 @@
+import { z } from "zod";
+
 export interface CandidateInfo {
   [key: string]: string;
 }
+
+export interface Question {
+  question: string;
+  correctAnswer: string;
+  chosenAnswer: string;
+}
+
+export enum Category {
+  UR = "UR",
+  EWS = "EWS",
+  OBC = "OBC",
+  SC = "SC",
+  ST = "ST",
+  ExSM = "ExSM",
+}
+
+export enum Languages {
+  English = "ENGLISH",
+  Hindi = "HINDI",
+}
+
+export enum Areas {
+  General = "GENERAL",
+  NexalArea = "NEXALAREA",
+  BoaderArea = "BORDERAREA",
+}
+
+export interface ExamData {
+  candidateInfo: CandidateInfo;
+  questions: Question[];
+}
+
+export enum Gender {
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+}
+
+export const FormSchema = z.object({
+  answerKeyUrl: z.string().url(),
+  category: z.nativeEnum(Category),
+  language: z.nativeEnum(Languages),
+  area: z.nativeEnum(Areas),
+  gender: z.nativeEnum(Gender),
+});
 
 export interface Question {
   question: string;
@@ -62,6 +108,8 @@ export interface StudentProps {
     overallRank: number
     categoryRank: number
     shiftRank: number
+    genderRank: number
+    areaRank: number
   }
   avgMarks: {
     overallAverageMarks: {
@@ -75,6 +123,16 @@ export interface StudentProps {
       }
     },
     shiftAverageMarks: {
+      _avg: {
+        totalMarks: number
+      }
+    },
+    genderAverageMarks: {
+      _avg: {
+        totalMarks: number
+      }
+    },
+    areaAverageMarks: {
       _avg: {
         totalMarks: number
       }

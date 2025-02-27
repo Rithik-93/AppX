@@ -1,55 +1,86 @@
-import { Question } from "@/app/types";
+"use server";
+
 import prisma from "../../../../prisma/src";
+import { Category, Domain } from "@prisma/client";
+import { domain } from "@/app/config/config";
+import { Areas, Gender } from "@/app/schema/types";
 
-export const calculateMarks = (questions: Question[], positiveMarking: number, negativeMarking: number): number => {
-  return questions.reduce((total, question) => {
-    const chosenOption = question.chosenAnswer !== '--' ? question.chosenAnswer : null;
-    const isCorrect = chosenOption === question.correctAnswer.charAt(0);
+export async function getAverageMarks(
+  examId: string,
+  category: string,
+  shiftTime: string,
+  gender: Gender,
+  area: Areas
+) {
+  // The domain variable seems to be used but not defined in the function parameters
+  // Assuming it's defined elsewhere in the scope, but you may need to add it as a parameter
 
-    if (isCorrect) {
-      total += positiveMarking;
-    } else if (chosenOption) {
-      total -= negativeMarking;
-    }
-
-    return total;
-  }, 0);
-};
-
-export async function getAverageMarks(examId: string, category: string, shiftTime: string) {
-
-  const overallAverageMarks = await prisma.examAttempt.aggregate({
-    where: {
-      examId
-    },
-    _avg: {
-      totalMarks: true
-    },
-  });
-
-  const categoryAverageMarks = await prisma.examAttempt.aggregate({
+  // Get all aggregations in a single query using Prisma's groupBy
+  const results = await prisma.examAttempt.groupBy({
+    by: ["examId"],
     where: {
       examId,
-      category
-    },
-    _avg: {
-      totalMarks: true,
-    }
-  });
-
-  const shiftAverageMarks = await prisma.examAttempt.aggregate({
-    where: {
-      examId,
-      shiftTime,
+      domain: domain as Domain,
     },
     _avg: {
       totalMarks: true,
     },
   });
+
+  const [categoryResults, shiftResults, genderResults, areaResults] =
+    await Promise.all([
+      prisma.examAttempt.aggregate({
+        where: {
+          examId,
+          domain: domain as Domain,
+          category: category as Category,
+        },
+        _avg: {
+          totalMarks: true,
+        },
+      }),
+
+      prisma.examAttempt.aggregate({
+        where: {
+          examId,
+          domain: domain as Domain,
+          shiftTime,
+        },
+        _avg: {
+          totalMarks: true,
+        },
+      }),
+
+      prisma.examAttempt.aggregate({
+        where: {
+          examId,
+          domain: domain as Domain,
+          shiftTime,
+          gender,
+        },
+        _avg: {
+          totalMarks: true,
+        },
+      }),
+
+      prisma.examAttempt.aggregate({
+        where: {
+          examId,
+          domain: domain as Domain,
+          shiftTime,
+          area,
+        },
+        _avg: {
+          totalMarks: true,
+        },
+      }),
+    ]);
 
   return {
-    overallAverageMarks,
-    categoryAverageMarks,
-    shiftAverageMarks
-  }
+    overallAverageMarks: results[0] ? results[0]._avg : { totalMarks: null },
+    categoryAverageMarks: categoryResults,
+    shiftAverageMarks: shiftResults,
+    genderAverageMarks: genderResults,
+    areaAverageMarks: areaResults,
+  };
 }

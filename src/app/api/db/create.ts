@@ -1,39 +1,53 @@
-// import { NextResponse } from "next/server";
-// import prisma from "../../../../prisma/src";
-// import { getExamProps } from "@/app/types";
 
-// export async function getExam({ testDate, examData, subject }: getExamProps) {
+
+import { Area, Category, Domain, Gender } from "@prisma/client";
+import prisma from "../../../../prisma/src";
+
+// async function findUser() {
 //     try {
-//         const exam = await prisma.exam.findUnique({
+//         const a = await prisma.user.findFirst({
 //             where: {
-//                 examDate_shiftTime_name: {
-//                     examDate: testDate,
-//                     shiftTime: examData.candidateInfo["Test Time"],
-//                     name: subject,
-//                 },
-//             },
-//             select: {
-//                 examDate: true,
-//                 id: true,
-//                 examAttempts: true,
-//                 positiveMarking: true,
-//                 negativeMarking: true,
-//             },
+//                 examAttempts: {
+//                     some: {
+//                         area: Area.GENERAL,
+//                         category: Category.UR,
+//                         domain: Domain.ROJGAR
+//                     }
+//                 }
+//             }
 //         });
 
-//         if (!exam) {
-//             return NextResponse.json({
-//                 message: "Exam not found"
-//             }, {
-//                 status: 404
-//             });
+//         if (a) {
+//             console.log(a);
+//         } else {
+//             console.log("No user found");
 //         }
-
-//         return exam
-//     } catch (error) {
-//         throw new Error(
-//             error instanceof Error ? error.message : "Error while finding the exam"
-//         );
+//     } catch (e) {
+//         console.error("Error fetching user:", e);
 //     }
-
 // }
+
+// findUser();
+
+
+
+// const user = await prisma.user.findFirst({
+//     include: { examAttempts: true },
+// });
+// console.log(JSON.stringify(user, null, 2));
+
+const userMarks = await prisma.examAttempt.findUnique({
+    where: {
+      rollNumber: '281241170410494',
+      examId: 'asd^%&DAGDyr',
+      domain: "ROJGAR" as Domain,
+      gender: "FEMALE" as Gender,
+      area: "BORDERAREA" as Area,
+    },
+  });
+
+  console.error(userMarks);
+  
+
+
+// 281241170410494 asd^%&DAGDyr ROJGAR FEMALE BORDERAREA
