@@ -157,6 +157,7 @@ export async function POST(req: NextRequest) {
       "----------------------------------------------------",
       domain
     );
+    // @ts-ignore
     const attempt = await findExamAttempt(domain as Domain, rollNumber, exam);
 
     console.error("attempt------", attempt);
@@ -172,6 +173,7 @@ export async function POST(req: NextRequest) {
           language: language,
           category: category,
           gender: gender,
+          totalMarks
         },
       });
 
@@ -226,6 +228,7 @@ export async function POST(req: NextRequest) {
         "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
       );
 
+      // @ts-ignore
       let user = await findUser(rollNumber, domain as Domain, exam);
 
       console.error("user------", user);
@@ -261,6 +264,7 @@ export async function POST(req: NextRequest) {
       if (user) {
         const examAttempt = await createAttempt(
           user,
+          //@ts-ignore
           exam,
           examData,
           totalMarks,

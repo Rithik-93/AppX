@@ -123,15 +123,13 @@ export const getRankForUser = async (
 
   const areaRank = await getAreaRank(examId, area as Areas, totalMarks);
 
-  
-  
   const overallCandidates = await prisma.examAttempt.count({
     where: {
       examId,
       domain: domain as Domain,
     },
   });
-  
+
   const categoryCandidates = await prisma.examAttempt.count({
     where: {
       examId,
@@ -139,7 +137,7 @@ export const getRankForUser = async (
       domain: domain as Domain,
     },
   });
-  
+
   const shiftCandidates = await prisma.examAttempt.count({
     where: {
       examId,
@@ -147,7 +145,7 @@ export const getRankForUser = async (
       domain: domain as Domain,
     },
   });
-  
+
   const candidatesByGender = await prisma.examAttempt.count({
     where: {
       examId,
@@ -155,7 +153,7 @@ export const getRankForUser = async (
       domain: domain as Domain,
     },
   });
-  
+
   const candidatesByArea = await prisma.examAttempt.count({
     where: {
       examId,
@@ -163,7 +161,7 @@ export const getRankForUser = async (
       domain: domain as Domain,
     },
   });
-  
+
   return {
     overallRank: `${overallRank.rank}/${overallCandidates}`,
     shiftRank: `${shiftRank.rank}/${shiftCandidates}`,

@@ -95,31 +95,53 @@ export function RankCard({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-6 md:grid-cols-3">
-              <Card className="border-2">
-                <CardHeader>
-                  <CardTitle className="text-center text-sm font-medium text-gray-500">Overall Rank</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-center text-2xl font-bold text-purple-900">{ranks.overallRank}</p>
-                </CardContent>
-              </Card>
-              <Card className="border-2">
-                <CardHeader>
-                  <CardTitle className="text-center text-sm font-medium text-gray-500">Category Rank</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-center text-2xl font-bold text-purple-900">{ranks.categoryRank}</p>
-                </CardContent>
-              </Card>
-              <Card className="border-2">
-                <CardHeader>
-                  <CardTitle className="text-center text-sm font-medium text-gray-500">Shift Rank</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-center text-2xl font-bold text-purple-900">{ranks.shiftRank}</p>
-                </CardContent>
-              </Card>
+            <div className="grid gap-6">
+              {/* First Row */}
+              <div className="grid md:grid-cols-3 gap-6">
+                <Card className="border-2">
+                  <CardHeader>
+                    <CardTitle className="text-center text-sm font-medium text-gray-500">Overall Rank</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-center text-2xl font-bold text-purple-900">{ranks.overallRank}</p>
+                  </CardContent>
+                </Card>
+                <Card className="border-2">
+                  <CardHeader>
+                    <CardTitle className="text-center text-sm font-medium text-gray-500">Category Rank</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-center text-2xl font-bold text-purple-900">{ranks.categoryRank}</p>
+                  </CardContent>
+                </Card>
+                <Card className="border-2">
+                  <CardHeader>
+                    <CardTitle className="text-center text-sm font-medium text-gray-500">Shift Rank</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-center text-2xl font-bold text-purple-900">{ranks.shiftRank}</p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="flex justify-center gap-6">
+                <Card className="border-2 w-[33.33%]">
+                  <CardHeader>
+                    <CardTitle className="text-center text-sm font-medium text-gray-500">Gender Rank</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-center text-2xl font-bold text-purple-900">{ranks.genderRank}</p>
+                  </CardContent>
+                </Card>
+                <Card className="border-2 w-[33.33%]">
+                  <CardHeader>
+                    <CardTitle className="text-center text-sm font-medium text-gray-500">Area Rank</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-center text-2xl font-bold text-purple-900">{ranks.areaRank}</p>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
 
             <div className="mt-6 grid gap-6 md:grid-cols-3">
@@ -129,7 +151,7 @@ export function RankCard({
                 </CardHeader>
                 <CardContent>
                   <p className="text-center text-2xl font-bold text-purple-900">
-                    {avgMarks.overallAverageMarks._avg.totalMarks.toFixed(2)}
+                    {avgMarks.overallAverageMarks.totalMarks.toFixed(2)}
                   </p>
                 </CardContent>
               </Card>

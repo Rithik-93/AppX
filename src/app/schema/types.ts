@@ -60,27 +60,27 @@ export interface ExamData {
 }
 
 export interface getExamProps {
-    testDate: string;
-    examData: ExamData;
-    subject: string
+  testDate: string;
+  examData: ExamData;
+  subject: string;
 }
 
 export interface ScoreCardProps {
-    name: string
-    category: string
-    examDate: string
-    examTime: string
-    totalMarks: number
-    //   normalizedMarks: number
-    rawRank: number
-    //   normalizedRank: number
-    subjectData: {
-        attempted: number
-        notAttempted: number
-        correct: number
-        wrong: number
-        totalMarks: number
-    }
+  name: string;
+  category: string;
+  examDate: string;
+  examTime: string;
+  totalMarks: number;
+  //   normalizedMarks: number
+  rawRank: string;
+  //   normalizedRank: number
+  subjectData: {
+    attempted: number;
+    notAttempted: number;
+    correct: number;
+    wrong: number;
+    totalMarks: number;
+  };
 }
 
 export interface MarksAboveData {
@@ -97,53 +97,51 @@ export interface MarksAboveData {
 }
 
 export interface StudentProps {
-  fullName: string
-  category: string
-  testDate: string
-  testTime: string
-  rollNumber: string
-  subject: string
-  testCenter: string
+  fullName: string;
+  category: string;
+  testDate: string;
+  testTime: string;
+  rollNumber: string;
+  subject: string;
+  testCenter: string;
   ranks: {
-    overallRank: number
-    categoryRank: number
-    shiftRank: number
-    genderRank: number
-    areaRank: number
-  }
+    overallRank: string; // "1/1" (was number)
+    categoryRank: string;
+    shiftRank: string;
+    genderRank: string;
+    areaRank: string;
+  };
   avgMarks: {
     overallAverageMarks: {
-      _avg: {
-        totalMarks: number
-      }
-    },
+        totalMarks: number;
+    };
     categoryAverageMarks: {
       _avg: {
-        totalMarks: number
-      }
-    },
+        totalMarks: number;
+      };
+    };
     shiftAverageMarks: {
       _avg: {
-        totalMarks: number
-      }
-    },
+        totalMarks: number;
+      };
+    };
     genderAverageMarks: {
       _avg: {
-        totalMarks: number
-      }
-    },
+        totalMarks: number;
+      };
+    };
     areaAverageMarks: {
       _avg: {
-        totalMarks: number
-      }
-    }
-  }
+        totalMarks: number | null; // Allows null values
+      };
+    };
+  };
   stats: {
-    attempted: number
-    notAttempted: number
-    correct: number
-    wrong: number
-    totalMarks: number
-  },
-  topRankers: MarksAboveData
+    attempted: number;
+    notAttempted: number;
+    correct: number;
+    wrong: number;
+    totalMarks: number;
+  };
+  topRankers: MarksAboveData;
 }

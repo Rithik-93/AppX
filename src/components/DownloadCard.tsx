@@ -52,7 +52,7 @@ const DownloadCard = forwardRef<HTMLDivElement, ScoreCardProps>(({
                 </TableHeader>
                 <TableBody>
                     <TableRow>
-                        <TableCell>Subject-1</TableCell>
+                        <TableCell>ALP Stage 1</TableCell>
                         <TableCell className="text-center">{subjectData.attempted}</TableCell>
                         <TableCell className="text-center">{subjectData.notAttempted}</TableCell>
                         <TableCell className="text-center">{subjectData.correct}</TableCell>

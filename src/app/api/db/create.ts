@@ -1,53 +1,51 @@
+import { PrismaClient } from '@prisma/client';
 
+const prisma = new PrismaClient();
 
-import { Area, Category, Domain, Gender } from "@prisma/client";
-import prisma from "../../../../prisma/src";
+async function main() {
+  const baseExam = {
+    name: "ALP Stage 1",
+    negativeMarking: 0.25,
+    positiveMarking: 5,
+  };
 
-// async function findUser() {
-//     try {
-//         const a = await prisma.user.findFirst({
-//             where: {
-//                 examAttempts: {
-//                     some: {
-//                         area: Area.GENERAL,
-//                         category: Category.UR,
-//                         domain: Domain.ROJGAR
-//                     }
-//                 }
-//             }
-//         });
+  const dates = [
+    "2025-02-04", "2025-02-05", "2025-02-06", "2025-02-07",
+    "2025-02-08", "2025-02-09", "2025-02-10", "2025-02-11",
+    "2025-02-12", "2025-02-13", "2025-02-17", "2025-02-18",
+    "2025-02-19", "2025-02-20", "2025-02-21", "2025-02-24", "2025-02-25"
+  ];
 
-//         if (a) {
-//             console.log(a);
-//         } else {
-//             console.log("No user found");
-//         }
-//     } catch (e) {
-//         console.error("Error fetching user:", e);
-//     }
-// }
+  const shifts = [
+    "9:00 AM - 10:00 AM",
+    "11:45 AM - 12:45 PM",
+    "2:30 PM - 3:30 PM",
+    "5:15 PM - 6:15 PM"
+  ];
 
-// findUser();
+  const examsToCreate = [];
 
+  for (const date of dates) {
+    for (const shift of shifts) {
+      examsToCreate.push({
+        ...baseExam,
+        examDate: date,
+        shiftTime: shift,
+      });
+    }
+  }
 
+  try {
+    const createdExams = await prisma.exam.createMany({
+      data: examsToCreate,
+    });
 
-// const user = await prisma.user.findFirst({
-//     include: { examAttempts: true },
-// });
-// console.log(JSON.stringify(user, null, 2));
+    console.log(`Successfully added ${createdExams.count} exams.`);
+  } catch (error) {
+    console.error("Error adding exams:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
 
-const userMarks = await prisma.examAttempt.findUnique({
-    where: {
-      rollNumber: '281241170410494',
-      examId: 'asd^%&DAGDyr',
-      domain: "ROJGAR" as Domain,
-      gender: "FEMALE" as Gender,
-      area: "BORDERAREA" as Area,
-    },
-  });
-
-  console.error(userMarks);
-  
-
-
-// 281241170410494 asd^%&DAGDyr ROJGAR FEMALE BORDERAREA
+main();
