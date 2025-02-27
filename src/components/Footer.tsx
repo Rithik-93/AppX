@@ -27,9 +27,6 @@ export function Footer() {
           </Link>
         </nav>
         <Separator className="my-4 md:my-6" />
-        <p className="text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Rojgarwithankit. All rights reserved.
-        </p>
       </div>
     </footer>
   )
