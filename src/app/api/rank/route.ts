@@ -13,6 +13,7 @@ import { calculateQuestionStats } from "@/app/utils/calculateQuestionStats";
 import { findExam } from "../db/exam";
 import { createAttempt, findExamAttempt } from "../db/examAttempt";
 import { createUser, findUser } from "../db/user";
+import { getUserNormalizedRanks } from "../normalisedRanks/overAllRank";
 
 export async function POST(req: NextRequest) {
   try {
@@ -169,7 +170,7 @@ export async function POST(req: NextRequest) {
           language: language,
           category: category,
           gender: gender,
-          totalMarks
+          totalMarks,
         },
       });
 
@@ -333,6 +334,14 @@ export async function POST(req: NextRequest) {
     );
     const topRankers = await getMarksAboveInfo();
 
+    const userNormalisedRank = await getUserNormalizedRanks(
+      exam.id,
+      rollNumber,
+      gender,
+      area,
+      domain as Domain
+    );
+
     console.log(
       JSON.stringify(
         {
@@ -350,6 +359,9 @@ export async function POST(req: NextRequest) {
             shiftRank: userRank.shiftRank,
             genderRank: userRank.genderRank,
             areaRank: userRank.areaRank,
+            overAllNormalisedRank: userNormalisedRank?.ranks.overall,
+            categoryNormalisedRank: userNormalisedRank?.ranks.category,
+            shiftNormalisedRank: userNormalisedRank?.ranks.shift
           },
           avgMarks,
           stats: {
@@ -380,6 +392,9 @@ export async function POST(req: NextRequest) {
         shiftRank: userRank.shiftRank,
         genderRank: userRank.genderRank,
         areaRank: userRank.areaRank,
+        overAllNormalisedRank: userNormalisedRank?.ranks.overall,
+        categoryNormalisedRank: userNormalisedRank?.ranks.category,
+        shiftNormalisedRank: userNormalisedRank?.ranks.shift
       },
       avgMarks,
       stats: {

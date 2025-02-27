@@ -16,60 +16,74 @@ const DownloadCard = forwardRef<HTMLDivElement, ScoreCardProps>(({
 }: ScoreCardProps, ref) => {
 
     return (
-        <Card ref={ref} className="w-[600px] p-6 space-y-6">
-            <div className="text-purple-900 text-primary-foreground p-4 -mx-6 -mt-6 rounded-t-lg">
-                <h1 className="text-xl font-semibold">
-                    ALP Stage 1 Scorecard
-                </h1>
-            </div>
+        <Card
+            ref={ref}
+            className="w-[600px] p-6 space-y-6 relative overflow-hidden"
+            style={{
+                backgroundImage: 'url("/rojgar.jpg")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+            }}
+        >
+            <div className="absolute inset-0 bg-white/50 pointer-events-none" />
 
-            <div className="grid grid-cols-2">
-                {[
-                    { label: "Name", value: name },
-                    { label: "Category", value: category },
-                    { label: "Exam Date", value: examDate },
-                    { label: "Exam Time", value: examTime },
-                    { label: "Total Marks", value: totalMarks.toFixed(2) },
-                    { label: "Raw Rank", value: rawRank }
-                ].map((item, index) => (
-                    <div key={index}>
-                        <p className="font-medium text-muted-foreground">{item.label}</p>
-                        <p className="font-semibold">{item.value}</p>
-                    </div>
-                ))}
-            </div>
+            <div className="relative z-10 space-y-6">
+                <div className="text-purple-900 text-primary-foreground p-4 -mx-6 -mt-6 rounded-t-lg">
+                    <h1 className="text-xl font-semibold">
+                        ALP Stage 1 Scorecard
+                    </h1>
+                </div>
 
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-[180px]">Subject</TableHead>
-                        <TableHead className="text-center">Attem.</TableHead>
-                        <TableHead className="text-center">Not Attem.</TableHead>
-                        <TableHead className="text-center">R</TableHead>
-                        <TableHead className="text-center">W</TableHead>
-                        <TableHead className="text-center">Marks</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    <TableRow>
-                        <TableCell>ALP Stage 1</TableCell>
-                        <TableCell className="text-center">{subjectData.attempted}</TableCell>
-                        <TableCell className="text-center">{subjectData.notAttempted}</TableCell>
-                        <TableCell className="text-center">{subjectData.correct}</TableCell>
-                        <TableCell className="text-center">{subjectData.wrong}</TableCell>
-                        <TableCell className="text-center">{subjectData.totalMarks.toFixed(2)}</TableCell>
-                    </TableRow>
-                    <TableRow className="text-purple-900 text-primary-foreground font-medium">
-                        <TableCell>Overall</TableCell>
-                        <TableCell className="text-center">{subjectData.attempted}</TableCell>
-                        <TableCell className="text-center">{subjectData.notAttempted}</TableCell>
-                        <TableCell className="text-center">{subjectData.correct}</TableCell>
-                        <TableCell className="text-center">{subjectData.wrong}</TableCell>
-                        <TableCell className="text-center">{subjectData.totalMarks.toFixed(2)}</TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
+                <div className="grid grid-cols-2">
+                    {[
+                        { label: "Name", value: name },
+                        { label: "Category", value: category },
+                        { label: "Exam Date", value: examDate },
+                        { label: "Exam Time", value: examTime },
+                        { label: "Total Marks", value: totalMarks.toFixed(2) },
+                        { label: "Raw Rank", value: rawRank }
+                    ].map((item, index) => (
+                        <div key={index}>
+                            <p className="font-medium text-muted-foreground">{item.label}</p>
+                            <p className="font-semibold">{item.value}</p>
+                        </div>
+                    ))}
+                </div>
+
+                <Table className="w-full px-5">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[180px]">Subject</TableHead>
+                            <TableHead className="text-center">Attem.</TableHead>
+                            <TableHead className="text-center">Not Attem.</TableHead>
+                            <TableHead className="text-center">R</TableHead>
+                            <TableHead className="text-center">W</TableHead>
+                            <TableHead className="text-center">Marks</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>ALP Stage 1</TableCell>
+                            <TableCell className="text-center">{subjectData.attempted}</TableCell>
+                            <TableCell className="text-center">{subjectData.notAttempted}</TableCell>
+                            <TableCell className="text-center">{subjectData.correct}</TableCell>
+                            <TableCell className="text-center">{subjectData.wrong}</TableCell>
+                            <TableCell className="text-center">{subjectData.totalMarks.toFixed(2)}</TableCell>
+                        </TableRow>
+                        <TableRow className="font-medium">
+                            <TableCell>Overall</TableCell>
+                            <TableCell className="text-center">{subjectData.attempted}</TableCell>
+                            <TableCell className="text-center">{subjectData.notAttempted}</TableCell>
+                            <TableCell className="text-center">{subjectData.correct}</TableCell>
+                            <TableCell className="text-center">{subjectData.wrong}</TableCell>
+                            <TableCell className="text-center">{subjectData.totalMarks.toFixed(2)}</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
         </Card>
+
     )
 })
 

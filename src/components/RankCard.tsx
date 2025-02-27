@@ -33,6 +33,7 @@ export function RankCard({
         const dataUrl = await toPng(scorecardRef.current, {
           quality: 1.0,
           backgroundColor: "white",
+          
         });
 
         const link = document.createElement("a");
@@ -287,7 +288,7 @@ export function RankCard({
                     <CardTitle className="text-center text-sm font-medium text-gray-500">Rank</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-center text-2xl font-bold text-purple-900">--</p>
+                    <p className="text-center text-2xl font-bold text-purple-900">{ranks.overAllNormalisedRank}</p>
                   </CardContent>
                 </Card>
                 <Card className="border-2">
@@ -295,7 +296,7 @@ export function RankCard({
                     <CardTitle className="text-center text-sm font-medium text-gray-500">Shift Rank</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-center text-2xl font-bold text-purple-900">--</p>
+                    <p className="text-center text-2xl font-bold text-purple-900">{ranks.shiftNormalisedRank}</p>
                   </CardContent>
                 </Card>
                 <Card className="border-2">
@@ -303,7 +304,7 @@ export function RankCard({
                     <CardTitle className="text-center text-sm font-medium text-gray-500">Category Rank</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-center text-2xl font-bold text-purple-900">--</p>
+                    <p className="text-center text-2xl font-bold text-purple-900">{ranks.categoryNormalisedRank}</p>
                   </CardContent>
                 </Card>
               </div>

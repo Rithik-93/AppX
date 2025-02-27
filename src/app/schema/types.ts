@@ -105,11 +105,14 @@ export interface StudentProps {
   subject: string;
   testCenter: string;
   ranks: {
-    overallRank: string; // "1/1" (was number)
+    overallRank: string;
     categoryRank: string;
     shiftRank: string;
     genderRank: string;
     areaRank: string;
+    overAllNormalisedRank: number,
+    categoryNormalisedRank: number,
+    shiftNormalisedRank: number
   };
   avgMarks: {
     overallAverageMarks: {
