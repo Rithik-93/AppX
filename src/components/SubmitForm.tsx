@@ -48,7 +48,8 @@ export default function SubmitForm() {
         category: values.category,
         gender: values.gender,
         area: values.area,
-        state: values.state
+        state: values.state,
+        phone: values.phone
       });
       setExamData(data.data)
       console.log(JSON.stringify(data.data, null, 2));
@@ -206,6 +207,23 @@ export default function SubmitForm() {
                             </SelectItem>
                           </SelectContent>
                         </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone Number (Optional)</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="tel"
+                            placeholder="Enter your phone number"
+                            {...field}
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}

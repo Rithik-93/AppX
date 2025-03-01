@@ -7,11 +7,13 @@ export async function findExamAttempt(
   rollNumber: string,
   exam: Exam
 ) {
-  const attempt = prisma.examAttempt.findUnique({
+  const attempt = await prisma.examAttempt.findUnique({
     where: {
-      domain: domain as Domain,
-      rollNumber,
-      examId: exam.id,
+      rollNumber_domain_examId: {
+        domain: domain as Domain,
+        rollNumber,
+        examId: exam.id,
+      },
     },
   });
 
@@ -31,8 +33,6 @@ export async function createAttempt(
   gender: Gender,
   area: Areas
 ) {
-console.error('looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
-
   try {
     const attempt = await prisma.examAttempt.create({
       data: {
@@ -49,9 +49,15 @@ console.error('loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
         area,
       },
     });
-  
+
     return attempt;
-  } catch(e) {
-    console.error(e);
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error("Error creating exam attempt:", e);
+      return { error: true, message: e.message };
+    } else {
+      console.error("Unknown error creating exam attempt:", e);
+      return { error: true, message: "Unknown error" };
+    }
   }
 }

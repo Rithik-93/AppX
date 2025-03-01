@@ -21,11 +21,11 @@ model User {
   domain       Domain
   category     Category
   area         Area
+  phone        String?
   gender       Gender
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   examAttempts ExamAttempt[]
-  ranks        Rank[]
   Answer       Answer[]
 }
 
@@ -36,7 +36,6 @@ model Exam {
   shiftTime       String
   negativeMarking Float
   positiveMarking Float
-  ranks           Rank[]
   questions       Question[]
   examAttempts    ExamAttempt[]
 
@@ -50,18 +49,6 @@ model Question {
   correctOption  String
   exam           Exam     @relation(fields: [examId], references: [id])
   studentAnswers Answer[]
-}
-
-model Rank {
-  id           String @id @default(cuid())
-  userId       String
-  examId       String
-  categoryRank Int
-  overallRank  Int
-  user         User   @relation(fields: [userId], references: [id])
-  exam         Exam   @relation(fields: [examId], references: [id])
-
-  @@unique([userId, examId])
 }
 
 model Answer {
@@ -94,7 +81,7 @@ model ExamAttempt {
   totalMarks  Float
   gender      Gender
 
-  @@unique([rollNumber, domain])
+  @@unique([rollNumber, domain, examId])
   @@unique([userId, examId, domain])
 }
 

@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { answerKeyUrl, category, area, gender, state } = data.data;
+    const { answerKeyUrl, category, area, gender, state, phone } = data.data;
     console.log(answerKeyUrl, category, area, gender, state);
 
     let response;
@@ -81,8 +81,7 @@ export async function POST(req: NextRequest) {
     const extractQuestionData = (): Question[] => {
       const questions: Question[] = [];
 
-      console.error(testDate, testTime, );
-      
+      console.error(testDate, testTime);
 
       const questionPanels = $(
         ".question-pnl, .question-panel, .exam-question, table.questions"
@@ -205,6 +204,7 @@ export async function POST(req: NextRequest) {
             area,
             category,
             gender,
+            phone,
           },
         });
       } else {
@@ -217,6 +217,7 @@ export async function POST(req: NextRequest) {
             area,
             gender,
             domain: domain as Domain,
+            phone,
           },
         });
       }
@@ -242,7 +243,8 @@ export async function POST(req: NextRequest) {
           category,
           area,
           gender,
-          domain as Domain
+          domain as Domain,
+          phone!
         );
       } else {
         // Update existing user if found
@@ -253,6 +255,9 @@ export async function POST(req: NextRequest) {
           },
           data: {
             category,
+            gender,
+            area,
+            phone,
           },
         });
       }
@@ -276,6 +281,19 @@ export async function POST(req: NextRequest) {
           gender,
           area
         );
+
+        // @ts-ignore
+        if (!examAttempt || examAttempt.error) {
+          // Handle the error case
+          return NextResponse.json(
+            {
+              success: false,
+              // @ts-ignore
+              message: examAttempt?.message || "Failed to create exam attempt",
+            },
+            { status: 400 }
+          );
+        }
 
         console.error("Exam Attempt:", examAttempt);
 
@@ -310,6 +328,7 @@ export async function POST(req: NextRequest) {
                     chosenOption: chosenOption,
                     isCorrect:
                       chosenOption === question.correctAnswer.charAt(0),
+                    //@ts-ignore
                     examAttemptId: examAttempt.id,
                   },
                 ],

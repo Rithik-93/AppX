@@ -29,7 +29,8 @@ export async function createUser(
   category: Category,
   area: Areas,
   gender: Gender,
-  domain: Domain
+  domain: Domain,
+  phone: string
 ) {
   try {
     const user = await prisma.user.create({
@@ -39,6 +40,7 @@ export async function createUser(
         area,
         gender,
         domain: domain as Domain,
+        phone
       },
     });
     console.error('user createdddddddd', user);

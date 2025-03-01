@@ -60,9 +60,8 @@ export enum States {
   LAKSHADWEEP = "LAKSHADWEEP",
   PUDUCHERRY = "PUDUCHERRY",
   LADAKH = "LADAKH",
-  JAMMU_AND_KASHMIR = "JAMMU_AND_KASHMIR"
+  JAMMU_AND_KASHMIR = "JAMMU_AND_KASHMIR",
 }
-
 
 export enum Areas {
   General = "GENERAL",
@@ -86,6 +85,13 @@ export const FormSchema = z.object({
   area: z.nativeEnum(Areas),
   state: z.nativeEnum(States),
   gender: z.nativeEnum(Gender),
+  phone: z
+    .string()
+    .trim()
+    .optional()
+    .refine((val) => !val || /^\d{10}$/.test(val), {
+      message: "Phone number must be 10 digits",
+    }),
 });
 
 export interface Question {
@@ -151,13 +157,13 @@ export interface StudentProps {
     genderRank: string;
     areaRank: string;
     stateRank: string;
-    overAllNormalisedRank: number,
-    categoryNormalisedRank: number,
-    shiftNormalisedRank: number
+    overAllNormalisedRank: number;
+    categoryNormalisedRank: number;
+    shiftNormalisedRank: number;
   };
   avgMarks: {
     overallAverageMarks: {
-        totalMarks: number;
+      totalMarks: number;
     };
     categoryAverageMarks: {
       _avg: {
