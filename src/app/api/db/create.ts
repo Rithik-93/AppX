@@ -1,5 +1,7 @@
 // import { PrismaClient } from '@prisma/client';
 
+import prisma from "../../../../prisma/src";
+
 // const prisma = new PrismaClient();
 
 // async function main() {
@@ -50,3 +52,24 @@
 // }
 
 // main();
+
+
+const attempt = await prisma.examAttempt.create({
+    data: {
+      userId: "cm7q2do5d000fe1mkdndjwgaf",  // Make sure `user?.id` exists or hardcode for testing
+      examId: "cm7nfqgn10000e19g1eubj0q5",
+      rollNumber: "281241170410494",
+      totalMarks: 281,
+      state: "BIHAR",
+      shiftTime: "12:30 PM - 1:30 PM",
+      category: "EWS",
+      domain: "SCIENCEMAGNET",
+      attemptDate: '26/11/2024',  // Format as ISO Date
+      gender: "FEMALE",
+      area: "NEXALAREA"
+    },
+  });
+
+  console.log(attempt);
+  
+  

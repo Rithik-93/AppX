@@ -156,7 +156,7 @@ export async function POST(req: NextRequest) {
       "----------------------------------------------------",
       domain
     );
-    // @ts-ignore
+    //@ts-ignore
     const attempt = await findExamAttempt(domain as Domain, rollNumber, exam);
 
     console.error("attempt------", attempt);
@@ -164,9 +164,11 @@ export async function POST(req: NextRequest) {
     if (attempt) {
       await prisma.examAttempt.update({
         where: {
-          rollNumber,
-          examId: exam.id,
-          domain: domain as Domain,
+          rollNumber_domain_examId: {
+            rollNumber,
+            domain: domain as Domain,
+            examId: exam.id,
+          },
         },
         data: {
           state,
@@ -248,6 +250,7 @@ export async function POST(req: NextRequest) {
         );
       } else {
         // Update existing user if found
+        console.error("reached hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
         user = await prisma.user.update({
           where: {
             id: user.id,
@@ -266,8 +269,11 @@ export async function POST(req: NextRequest) {
 
       // This line needs to use the newly created user, which might be null
       // if the createUser function failed
-      if (user) {
+      // if (user) {
+      console.error("gotchaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+      
         const examAttempt = await createAttempt(
+          //@ts-ignore
           user,
           //@ts-ignore
           exam,
@@ -281,9 +287,9 @@ export async function POST(req: NextRequest) {
           gender,
           area
         );
+        console.error("gotchaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddddddddddddddd");
 
-        // @ts-ignore
-        if (!examAttempt || examAttempt.error) {
+        if (!examAttempt) {
           // Handle the error case
           return NextResponse.json(
             {
@@ -297,7 +303,6 @@ export async function POST(req: NextRequest) {
 
         console.error("Exam Attempt:", examAttempt);
 
-        // Only proceed with creating questions/answers if we have a valid examAttempt
         if (examAttempt) {
           await Promise.all(
             examData.questions.map(async (question) => {
@@ -323,6 +328,7 @@ export async function POST(req: NextRequest) {
               await prisma.answer.createMany({
                 data: [
                   {
+                    //@ts-ignore
                     userId: user.id,
                     questionId: questionId,
                     chosenOption: chosenOption,
@@ -336,12 +342,12 @@ export async function POST(req: NextRequest) {
             })
           );
         }
-      } else {
+      // } else {
         console.error("Failed to create user");
-        // Handle the error case appropriately
-      }
+      // }
     }
-
+   console.log("line 341111111111111111111111111111111111");
+   
     const userRank = await getRankForUser(
       exam.id,
       rollNumber,

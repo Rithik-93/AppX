@@ -34,11 +34,15 @@ export async function createAttempt(
   area: Areas
 ) {
   try {
+    console.log("hereee*******************************ee",
+      user.id,exam.id,examData.candidateInfo["Roll Number"], totalMarks,state,testTime,category,domain,testDate,gender,area
+    );
+    
     const attempt = await prisma.examAttempt.create({
       data: {
         userId: user?.id,
         examId: exam.id,
-        rollNumber: examData.candidateInfo["Roll Number"] || "N/A",
+        rollNumber: examData.candidateInfo["Roll Number"],
         totalMarks,
         state,
         shiftTime: testTime,

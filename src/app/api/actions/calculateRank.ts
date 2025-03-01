@@ -96,15 +96,23 @@ export const getRankForUser = async (
   CandidateGender: Gender,
   CandidatAerea: Areas
 ) => {
+  console.log(
+    rollNumber,
+    examId,
+    domain,
+    CandidateGender,
+    CandidatAerea,
+    "**************************************"
+  );
 
-  console.log(rollNumber, examId, domain, CandidateGender, CandidatAerea,'**************************************');
-  
   const userMarks = await prisma.examAttempt.findUnique({
     where: {
-      rollNumber,
-      examId,
-      domain: domain as Domain,
-      state: userState
+      rollNumber_domain_examId: {
+        rollNumber,
+        examId,
+        domain: domain as Domain,
+      },
+      state: userState,
     },
   });
 
@@ -125,7 +133,7 @@ export const getRankForUser = async (
 
   const areaRank = await getAreaRank(examId, area as Areas, totalMarks);
 
-  const stateRank = await getStateRank(examId, state as States, totalMarks)
+  const stateRank = await getStateRank(examId, state as States, totalMarks);
 
   const overallCandidates = await prisma.examAttempt.count({
     where: {
@@ -146,9 +154,9 @@ export const getRankForUser = async (
     where: {
       examId,
       state,
-      domain: domain as Domain
-    }
-  })
+      domain: domain as Domain,
+    },
+  });
 
   const shiftCandidates = await prisma.examAttempt.count({
     where: {
@@ -180,7 +188,7 @@ export const getRankForUser = async (
     categoryRank: `${categoryRank.rank}/${categoryCandidates}`,
     genderRank: `${genderRank.rank}/${candidatesByGender}`,
     areaRank: `${areaRank.rank}/${candidatesByArea}`,
-    stateRank: `${stateRank.rank}/${stateCandidates}`
+    stateRank: `${stateRank.rank}/${stateCandidates}`,
   };
 };
 
@@ -311,7 +319,11 @@ const getAreaRank = async (examId: string, area: Areas, userMarks: number) => {
   return { rank };
 };
 
-const getStateRank = async (examId: string, state: States, userMarks: number) => {
+const getStateRank = async (
+  examId: string,
+  state: States,
+  userMarks: number
+) => {
   const scores = await prisma.examAttempt.findMany({
     where: { examId, state, domain: domain as Domain },
     select: { userId: true, totalMarks: true },
