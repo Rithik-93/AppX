@@ -6,11 +6,12 @@ export async function findExam(
   examData: ExamData,
   subject: string
 ) {
+  
   const exam = await prisma.exam.findUnique({
     where: {
       examDate_shiftTime_name: {
         examDate: testDate,
-        shiftTime: examData.candidateInfo["Test Time"],
+        shiftTime: examData.candidateInfo["Exam Time"],
         name: subject,
       },
     },

@@ -73,9 +73,9 @@ export async function POST(req: NextRequest) {
       }
     });
 
-    const testCenter = examData.candidateInfo["Test Center Name"];
-    const testDate = examData.candidateInfo["Test Date"];
-    const testTime = examData.candidateInfo["Test Time"];
+    const testCenter = examData.candidateInfo["Venue Name"];
+    const testDate = examData.candidateInfo["Exam Date"];
+    const testTime = examData.candidateInfo["Exam Time"];
     const subject = examData.candidateInfo.Subject;
     const rollNumber = examData.candidateInfo["Roll Number"] || "N/A";
     const extractQuestionData = (): Question[] => {
@@ -130,6 +130,9 @@ export async function POST(req: NextRequest) {
       const match = questionText.match(/Question ID :(\d+)/);
       return match ? match[1] : " ";
     };
+
+    console.error(testTime,testCenter,testDate,examData,'-------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+    
 
     const exam = await findExam(testDate, examData, subject);
 
