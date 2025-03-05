@@ -116,3 +116,41 @@
 
 // Export the function to be called
 // export default runMassMarksRecalculation
+
+import { createObjectCsvWriter } from 'csv-writer';
+import prisma from '../../../../prisma/src'; // your prisma instance
+
+async function exportUsersToCsv() {
+  const users = await prisma.user.findMany({
+    where: {
+        domain: "ROJGAR"
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      area: true,
+      category: true,
+      gender: true,
+      phone: true
+    }
+  });
+
+  const csvWriter = createObjectCsvWriter({
+    path: 'rojgar_users.csv',
+    header: [
+      { id: 'name', title: 'Name' },
+      { id: 'email', title: 'Email' },
+      { id: 'area', title: 'Area' },
+      { id: 'category', title: 'Category' },
+      { id: 'gender', title: 'Gender' },
+      { id: 'phone', title: 'Phone' },
+    ]
+  });
+
+  await csvWriter.writeRecords(users);
+
+  console.log('CSV file was written successfully');
+}
+
+exportUsersToCsv();

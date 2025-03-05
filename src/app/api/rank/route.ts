@@ -33,7 +33,6 @@ export async function POST(req: NextRequest) {
     }
 
     const { answerKeyUrl, category, area, gender, state, phone } = data.data;
-    console.log(answerKeyUrl, category, area, gender, state);
 
     let response;
 
@@ -81,7 +80,7 @@ export async function POST(req: NextRequest) {
     const extractQuestionData = (): Question[] => {
       const questions: Question[] = [];
 
-      console.error(testDate, testTime);
+      // console.error(testDate, testTime);
 
       const questionPanels = $(
         ".question-pnl, .question-panel, .exam-question, table.questions"
@@ -131,12 +130,12 @@ export async function POST(req: NextRequest) {
       return match ? match[1] : " ";
     };
 
-    console.error(testTime,testCenter,testDate,examData,'-------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+    // console.error(testTime,testCenter,testDate,examData,'-------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
     
 
     const exam = await findExam(testDate, examData, subject);
 
-    console.error("exam------", exam);
+    // console.error("exam------", exam);
 
     if (!exam) {
       return NextResponse.json(
@@ -155,14 +154,14 @@ export async function POST(req: NextRequest) {
       exam.negativeMarking
     );
 
-    console.error(
-      "----------------------------------------------------",
-      domain
-    );
+    // console.error(
+    //   "----------------------------------------------------",
+    //   domain
+    // );
     //@ts-ignore
     const attempt = await findExamAttempt(domain as Domain, rollNumber, exam);
 
-    console.error("attempt------", attempt);
+    // console.error("attempt------", attempt);
 
     if (attempt) {
       await prisma.examAttempt.update({
@@ -181,7 +180,7 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      console.error("not reaching||||||||||||||||||||||||||||");
+      // console.error("not reaching||||||||||||||||||||||||||||");
 
       let user = await prisma.user.findFirst({
         where: {
@@ -195,10 +194,10 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      console.error("User after upsert:", user);
+      // console.error("User after upsert:", user);
 
       if (user) {
-        console.error("inside");
+        // console.error("inside");
 
         user = await prisma.user.update({
           where: {
@@ -213,7 +212,7 @@ export async function POST(req: NextRequest) {
           },
         });
       } else {
-        console.error("else++++++++++++++");
+        // console.error("else++++++++++++++");
         user = await prisma.user.create({
           data: {
             name:
@@ -227,21 +226,21 @@ export async function POST(req: NextRequest) {
         });
       }
     } else {
-      console.log(
-        rollNumber,
-        domain as Domain,
-        exam,
-        "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-      );
+      // console.log(
+      //   rollNumber,
+      //   domain as Domain,
+      //   exam,
+      //   "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+      // );
 
       // @ts-ignore
       let user = await findUser(rollNumber, domain as Domain, exam);
 
-      console.error("user------", user);
+      // console.error("user------", user);
 
       // Create the user if it doesn't exist
       if (!user) {
-        console.error("creating userrrrrrrrrr");
+        // console.error("creating userrrrrrrrrr");
 
         user = await createUser(
           examData,
@@ -253,7 +252,7 @@ export async function POST(req: NextRequest) {
         );
       } else {
         // Update existing user if found
-        console.error("reached hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+        // console.error("reached hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
         user = await prisma.user.update({
           where: {
             id: user.id,
