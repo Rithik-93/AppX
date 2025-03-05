@@ -25,17 +25,17 @@
 
 
 // import { PrismaClient } from '@prisma/client'
-import prisma from '../../../../prisma/src';
+// import prisma from '../../../../prisma/src';
 
-const examAttempts = await prisma.examAttempt.findMany({
-  where: {
-    totalMarks: {
-      gt: 146.5 // greater than 146.5
-    }
-  }
-});
+// const examAttempts = await prisma.examAttempt.findMany({
+//   where: {
+//     totalMarks: {
+//       gt: 146.5 // greater than 146.5
+//     }
+//   }
+// });
 
-console.log(examAttempts.length);
+// console.log(examAttempts.length);
 
 
 // async function recalculateTotalMarksForAllExams() {
