@@ -267,12 +267,12 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      console.error("user------", user);
+      // console.error("user------", user);
 
       // This line needs to use the newly created user, which might be null
       // if the createUser function failed
       // if (user) {
-      console.error("gotchaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+      // console.error("gotchaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
       
         const examAttempt = await createAttempt(
           //@ts-ignore
@@ -289,7 +289,8 @@ export async function POST(req: NextRequest) {
           gender,
           area
         );
-        console.error("gotchaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaddddddddddddddddd");
+        // console.error("gotchaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        // aaaaaaaaddddddddddddddddd");
 
         if (!examAttempt) {
           // Handle the error case
@@ -303,7 +304,7 @@ export async function POST(req: NextRequest) {
           );
         }
 
-        console.error("Exam Attempt:", examAttempt);
+        // console.error("Exam Attempt:", examAttempt);
 
         if (examAttempt) {
           await Promise.all(
@@ -348,7 +349,7 @@ export async function POST(req: NextRequest) {
         console.error("Failed to create user");
       // }
     }
-   console.log("line 341111111111111111111111111111111111");
+  //  console.log("line 341111111111111111111111111111111111");
    
     const userRank = await getRankForUser(
       exam.id,
@@ -381,42 +382,42 @@ export async function POST(req: NextRequest) {
       domain as Domain
     );
 
-    console.log(
-      JSON.stringify(
-        {
-          fullName:
-            examData.candidateInfo["Candidate Name"] || "Unknown Candidate",
-          category,
-          testDate,
-          testTime,
-          rollNumber,
-          subject,
-          testCenter,
-          ranks: {
-            overallRank: userRank.overallRank,
-            categoryRank: userRank.categoryRank,
-            shiftRank: userRank.shiftRank,
-            genderRank: userRank.genderRank,
-            areaRank: userRank.areaRank,
-            stateRank: userRank.stateRank,
-            overAllNormalisedRank: userNormalisedRank?.ranks.overall,
-            categoryNormalisedRank: userNormalisedRank?.ranks.category,
-            shiftNormalisedRank: userNormalisedRank?.ranks.shift,
-          },
-          avgMarks,
-          stats: {
-            attempted: questionStats.attempted,
-            notAttempted: questionStats.notAttempted,
-            correct: questionStats.correct,
-            wrong: questionStats.wrong,
-            totalMarks: questionStats.totalMarks,
-          },
-          topRankers,
-        },
-        null,
-        2
-      )
-    );
+    // console.log(
+    //   JSON.stringify(
+    //     {
+    //       fullName:
+    //         examData.candidateInfo["Candidate Name"] || "Unknown Candidate",
+    //       category,
+    //       testDate,
+    //       testTime,
+    //       rollNumber,
+    //       subject,
+    //       testCenter,
+    //       ranks: {
+    //         overallRank: userRank.overallRank,
+    //         categoryRank: userRank.categoryRank,
+    //         shiftRank: userRank.shiftRank,
+    //         genderRank: userRank.genderRank,
+    //         areaRank: userRank.areaRank,
+    //         stateRank: userRank.stateRank,
+    //         overAllNormalisedRank: userNormalisedRank?.ranks.overall,
+    //         categoryNormalisedRank: userNormalisedRank?.ranks.category,
+    //         shiftNormalisedRank: userNormalisedRank?.ranks.shift,
+    //       },
+    //       avgMarks,
+    //       stats: {
+    //         attempted: questionStats.attempted,
+    //         notAttempted: questionStats.notAttempted,
+    //         correct: questionStats.correct,
+    //         wrong: questionStats.wrong,
+    //         totalMarks: questionStats.totalMarks,
+    //       },
+    //       topRankers,
+    //     },
+    //     null,
+    //     2
+    //   )
+    // );
 
     return NextResponse.json({
       fullName: examData.candidateInfo["Candidate Name"] || "Unknown Candidate",
