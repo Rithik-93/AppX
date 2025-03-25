@@ -35,6 +35,7 @@ export async function findUser(rollNumber: string, domain: Domain, examId: strin
     return user;
   } catch(e) {
     // console.error('Error finding user:', e);
+    console.log(e);
     return null;
   }
 }
@@ -72,6 +73,7 @@ export async function createUser(
     return user;
   } catch(e) {
     // console.error('Error creating user:', e);
+    console.log(e);
     return null; // Return null instead of undefined
   }
 }
