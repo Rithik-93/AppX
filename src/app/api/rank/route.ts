@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
     };
 
     examData.questions = extractQuestionData();
-    console.error(examData.candidateInfo, '%%%%%%%%%%%%');
+    // console.error(examData.candidateInfo, '%%%%%%%%%%%%');
 
 
     if (Object.keys(examData.candidateInfo).length === 0) {
@@ -132,12 +132,12 @@ export async function POST(req: NextRequest) {
       return match ? match[1] : " ";
     };
 
-    console.error(subject, testDate, '-------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+    // console.error(subject, testDate, '-------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
 
 
     const exam = await findExam(testDate, testTime, subject);
 
-    console.error("exam------", exam);
+    // console.error("exam------", exam);
 
     if (!exam) {
       return NextResponse.json(
@@ -156,14 +156,14 @@ export async function POST(req: NextRequest) {
       exam.negativeMarking
     );
 
-    console.error(
-      "----------------------------------------------------",
-      domain
-    );
+    // console.error(
+    //   "----------------------------------------------------",
+    //   domain
+    // );
     //@ts-ignore
     const attempt = await findExamAttempt(domain as Domain, rollNumber, exam);
 
-    console.error("attempt------", attempt);
+    // console.error("attempt------", attempt);
     // var user: User;
 
     if (attempt) {
@@ -239,12 +239,12 @@ export async function POST(req: NextRequest) {
         });
       }
     } else {
-      console.log(
-        rollNumber,
-        domain as Domain,
-        exam,
-        "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-      );
+      // console.log(
+      //   rollNumber,
+      //   domain as Domain,
+      //   exam,
+      //   "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+      // );
       let user;
 
       user = await prisma.user.findFirst({
@@ -260,7 +260,7 @@ export async function POST(req: NextRequest) {
       });
 
       if (user) {
-        console.error("inside7777777777777777777777777777777777777777777777777777777777777");
+        // console.error("inside7777777777777777777777777777777777777777777777777777777777777");
 
         await prisma.user.update({
           where: {
@@ -288,7 +288,7 @@ export async function POST(req: NextRequest) {
           },
         });
       }
-      console.log('User after creation/update:', user);
+      // console.log('User after creation/update:', user);
       const examAttempt = await createAttempt(
         user,
         exam,
@@ -411,7 +411,7 @@ export async function POST(req: NextRequest) {
       topRankers,
     });
   } catch (error) {
-    console.error("Error during scraping:", error);
+    // console.error("Error during scraping:", error);
 
     if (error instanceof Error) {
       return NextResponse.json(
