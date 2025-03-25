@@ -20,7 +20,7 @@ model User {
   email        String?
   domain       Domain
   category     Category
-  area         Area
+  zone         Zone
   phone        String?
   gender       Gender
   createdAt    DateTime      @default(now())
@@ -64,22 +64,21 @@ model Answer {
 }
 
 model ExamAttempt {
-  id          String    @id @default(cuid())
-  userId      String?
-  examId      String
-  rollNumber  String
-  language    Language?
-  category    Category
-  shiftTime   String
-  state       States
-  attemptDate String
-  domain      Domain
-  area        Area
-  user        User?     @relation(fields: [userId], references: [id])
-  exam        Exam      @relation(fields: [examId], references: [id])
-  answers     Answer[]
-  totalMarks  Float
-  gender      Gender
+  id            String        @id @default(cuid())
+  userId        String?
+  examId        String
+  rollNumber    String
+  category      Category
+  HorizontalCat HorizontalCat
+  shiftTime     String
+  attemptDate   String
+  domain        Domain
+  zone          Zone
+  user          User?         @relation(fields: [userId], references: [id])
+  exam          Exam          @relation(fields: [examId], references: [id])
+  answers       Answer[]
+  totalMarks    Float
+  gender        Gender
 
   @@unique([rollNumber, domain, examId])
   @@unique([userId, examId, domain])
@@ -101,53 +100,40 @@ enum Category {
   OBC
   SC
   ST
-  ExSM
 }
 
-enum States {
-  ANDHRAPRADESH
-  ARUNACHALPRADESH
-  ASSAM
-  BIHAR
-  CHHATTISGARH
-  GOA
-  GUJARAT
-  HARYANA
-  HIMACHALPRADESH
-  JHARKHAND
-  KARNATAKA
-  KERALA
-  MADHYAPRADESH
-  MAHARASHTRA
-  MANIPUR
-  MEGHALAYA
-  MIZORAM
-  NAGALAND
-  ODISHA
-  PUNJAB
-  RAJASTHAN
-  SIKKIM
-  TAMILNADU
-  TELANGANA
-  TRIPURA
-  UTTARPRADESH
-  UTTARAKHAND
-  WESTBENGAL
-  ANDAMAN_AND_NICOBAR_ISLANDS
+enum HorizontalCat {
+  EXSM
+  OH
+  VH
+  HH
+  OtherPWD
+}
+
+enum Zone {
+  JAMMU_SRINAGAR
+  KOLKATA
+  MALDA
+  MUMBAI
+  MUZAFFARPUR
+  PATNA
+  PRAYAGRAJ
+  RANCHI
+  SECUNDERABAD
+  SILIGURI
+  THIRUVANANTHAPURAM
+  AHMEDABAD
+  AJMER
+  BANGALORE
+  BHOPAL
+  BHUBANESWAR
+  BILASPUR
   CHANDIGARH
-  DADRA_AND_NAGAR_HAVELI_AND_DAMAN_AND_DIU
-  DELHI
-  LAKSHADWEEP
-  PUDUCHERRY
-  LADAKH
-  JAMMU_AND_KASHMIR
+  CHENNAI
+  GORAKHPUR
+  GUWAHATI
 }
 
-enum Area {
-  GENERAL
-  NEXALAREA
-  BORDERAREA
-}
 
 enum Domain {
   ROJGAR

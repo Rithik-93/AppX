@@ -146,9 +146,6 @@ export function RankCard({
                   <CardHeader>
                     <CardTitle className="text-center text-sm font-medium text-gray-500">State Rank</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-center text-2xl font-bold text-purple-900">{ranks.stateRank}</p>
-                  </CardContent>
                 </Card>
               </div>
             </div>

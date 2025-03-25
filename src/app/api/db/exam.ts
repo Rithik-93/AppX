@@ -1,9 +1,8 @@
-import { ExamData } from "@/app/schema/types";
 import prisma from "../../../../prisma/src";
 
 export async function findExam(
   testDate: string,
-  examData: ExamData,
+  testTime: string,
   subject: string
 ) {
   
@@ -11,7 +10,7 @@ export async function findExam(
     where: {
       examDate_shiftTime_name: {
         examDate: testDate,
-        shiftTime: examData.candidateInfo["Exam Time"],
+        shiftTime: testTime,
         name: subject,
       },
     },

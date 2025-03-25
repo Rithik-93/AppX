@@ -5,13 +5,13 @@ CREATE TYPE "Language" AS ENUM ('ENGLISH', 'HINDI');
 CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE');
 
 -- CreateEnum
-CREATE TYPE "Category" AS ENUM ('UR', 'EWS', 'OBC', 'SC', 'ST', 'ExSM');
+CREATE TYPE "Category" AS ENUM ('UR', 'EWS', 'OBC', 'SC', 'ST');
 
 -- CreateEnum
-CREATE TYPE "States" AS ENUM ('ANDHRAPRADESH', 'ARUNACHALPRADESH', 'ASSAM', 'BIHAR', 'CHHATTISGARH', 'GOA', 'GUJARAT', 'HARYANA', 'HIMACHALPRADESH', 'JHARKHAND', 'KARNATAKA', 'KERALA', 'MADHYAPRADESH', 'MAHARASHTRA', 'MANIPUR', 'MEGHALAYA', 'MIZORAM', 'NAGALAND', 'ODISHA', 'PUNJAB', 'RAJASTHAN', 'SIKKIM', 'TAMILNADU', 'TELANGANA', 'TRIPURA', 'UTTARPRADESH', 'UTTARAKHAND', 'WESTBENGAL', 'ANDAMAN_AND_NICOBAR_ISLANDS', 'CHANDIGARH', 'DADRA_AND_NAGAR_HAVELI_AND_DAMAN_AND_DIU', 'DELHI', 'LAKSHADWEEP', 'PUDUCHERRY', 'LADAKH', 'JAMMU_AND_KASHMIR');
+CREATE TYPE "HorizontalCat" AS ENUM ('EXSM', 'OH', 'VH', 'HH', 'OtherPWD');
 
 -- CreateEnum
-CREATE TYPE "Area" AS ENUM ('GENERAL', 'NEXALAREA', 'BORDERAREA');
+CREATE TYPE "Area" AS ENUM ('JAMMU_SRINAGAR', 'KOLKATA', 'MALDA', 'MUMBAI', 'MUZAFFARPUR', 'PATNA', 'PRAYAGRAJ', 'RANCHI', 'SECUNDERABAD', 'SILIGURI', 'THIRUVANANTHAPURAM', 'AHMEDABAD', 'AJMER', 'BANGALORE', 'BHOPAL', 'BHUBANESWAR', 'BILASPUR', 'CHANDIGARH', 'CHENNAI', 'GORAKHPUR', 'GUWAHATI');
 
 -- CreateEnum
 CREATE TYPE "Domain" AS ENUM ('ROJGAR', 'SCIENCEMAGNET');
@@ -24,6 +24,7 @@ CREATE TABLE "User" (
     "domain" "Domain" NOT NULL,
     "category" "Category" NOT NULL,
     "area" "Area" NOT NULL,
+    "phone" TEXT,
     "gender" "Gender" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -54,17 +55,6 @@ CREATE TABLE "Question" (
 );
 
 -- CreateTable
-CREATE TABLE "Rank" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "examId" TEXT NOT NULL,
-    "categoryRank" INTEGER NOT NULL,
-    "overallRank" INTEGER NOT NULL,
-
-    CONSTRAINT "Rank_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Answer" (
     "id" TEXT NOT NULL,
     "userId" TEXT,
@@ -82,13 +72,12 @@ CREATE TABLE "ExamAttempt" (
     "userId" TEXT,
     "examId" TEXT NOT NULL,
     "rollNumber" TEXT NOT NULL,
-    "language" "Language",
     "category" "Category" NOT NULL,
+    "HorizontalCat" "HorizontalCat" NOT NULL,
     "shiftTime" TEXT NOT NULL,
-    "state" "States" NOT NULL,
     "attemptDate" TEXT NOT NULL,
     "domain" "Domain" NOT NULL,
-    "area" "Area" NOT NULL,
+    "zone" "Area" NOT NULL,
     "totalMarks" DOUBLE PRECISION NOT NULL,
     "gender" "Gender" NOT NULL,
 
@@ -102,22 +91,13 @@ CREATE UNIQUE INDEX "Exam_examDate_shiftTime_name_key" ON "Exam"("examDate", "sh
 CREATE UNIQUE INDEX "Question_questionId_key" ON "Question"("questionId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Rank_userId_examId_key" ON "Rank"("userId", "examId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "ExamAttempt_rollNumber_key" ON "ExamAttempt"("rollNumber");
+CREATE UNIQUE INDEX "ExamAttempt_rollNumber_domain_examId_key" ON "ExamAttempt"("rollNumber", "domain", "examId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ExamAttempt_userId_examId_domain_key" ON "ExamAttempt"("userId", "examId", "domain");
 
 -- AddForeignKey
 ALTER TABLE "Question" ADD CONSTRAINT "Question_examId_fkey" FOREIGN KEY ("examId") REFERENCES "Exam"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Rank" ADD CONSTRAINT "Rank_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Rank" ADD CONSTRAINT "Rank_examId_fkey" FOREIGN KEY ("examId") REFERENCES "Exam"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Answer" ADD CONSTRAINT "Answer_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

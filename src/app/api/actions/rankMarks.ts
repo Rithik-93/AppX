@@ -59,20 +59,90 @@ type MarksAboveData = {
   [key: string]: Record<string, number>;
 };
 
-export async function getMarksAboveInfo(): Promise<MarksAboveData> {
+export async function getMarksAboveInfo(subject: string): Promise<MarksAboveData> {
   const marksAboveData: MarksAboveData = {};
 
   const ranges = [
-    { range: '70', filter: { totalMarks: { gt: 70 }, domain: domain as Domain } },
-    { range: '65', filter: { totalMarks: { gt: 65 }, domain: domain as Domain } },
-    { range: '60', filter: { totalMarks: { gt: 60 }, domain: domain as Domain } },
-    { range: '55', filter: { totalMarks: { gt: 55 }, domain: domain as Domain } },
-    { range: '50', filter: { totalMarks: { gt: 50 }, domain: domain as Domain } },
-    { range: '45', filter: { totalMarks: { gt: 45 }, domain: domain as Domain } },
-    { range: '40', filter: { totalMarks: { gt: 40 }, domain: domain as Domain } },
-    { range: '35', filter: { totalMarks: { gt: 35 }, domain: domain as Domain } },
-    { range: '30', filter: { totalMarks: { gt: 30 }, domain: domain as Domain } },
-    { range: '20', filter: { totalMarks: { gt: 20 }, domain: domain as Domain } },
+    {
+      range: '70', filter: {
+        totalMarks: { gt: 70 }, domain: domain as Domain,
+        exam: {
+          name: subject
+        }
+      }
+    },
+    {
+      range: '65', filter: {
+        totalMarks: { gt: 65 }, domain: domain as Domain,
+        exam: {
+          name: subject
+        }
+      }
+    },
+    {
+      range: '60', filter: {
+        totalMarks: { gt: 60 }, domain: domain as Domain,
+        exam: {
+          name: subject
+        }
+      }
+    },
+    {
+      range: '55', filter: {
+        totalMarks: { gt: 55 }, domain: domain as Domain,
+        exam: {
+          name: subject
+        }
+      }
+    },
+    {
+      range: '50', filter: {
+        totalMarks: { gt: 50 }, domain: domain as Domain,
+        exam: {
+          name: subject
+        }
+      }
+    },
+    {
+      range: '45', filter: {
+        totalMarks: { gt: 45 }, domain: domain as Domain,
+        exam: {
+          name: subject
+        }
+      }
+    },
+    {
+      range: '40', filter: {
+        totalMarks: { gt: 40 }, domain: domain as Domain,
+        exam: {
+          name: subject
+        }
+      }
+    },
+    {
+      range: '35', filter: {
+        totalMarks: { gt: 35 }, domain: domain as Domain,
+        exam: {
+          name: subject
+        }
+      }
+    },
+    {
+      range: '30', filter: {
+        totalMarks: { gt: 30 }, domain: domain as Domain,
+        exam: {
+          name: subject
+        }
+      }
+    },
+    {
+      range: '20', filter: {
+        totalMarks: { gt: 20 }, domain: domain as Domain,
+        exam: {
+          name: subject
+        }
+      }
+    },
   ];
 
   for (const { range, filter } of ranges) {

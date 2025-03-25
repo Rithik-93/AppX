@@ -1,3 +1,4 @@
+import { HorizontalCat } from "@prisma/client";
 import { z } from "zod";
 
 export interface CandidateInfo {
@@ -16,7 +17,6 @@ export enum Category {
   OBC = "OBC",
   SC = "SC",
   ST = "ST",
-  ExSM = "ExSM",
 }
 
 export enum Languages {
@@ -63,10 +63,28 @@ export enum States {
   JAMMU_AND_KASHMIR = "JAMMU_AND_KASHMIR",
 }
 
-export enum Areas {
-  General = "GENERAL",
-  NexalArea = "NEXALAREA",
-  BoaderArea = "BORDERAREA",
+export enum Zone {
+  JAMMU_SRINAGAR = "JAMMU_SRINAGAR",
+  KOLKATA = "KOLKATA",
+  MALDA = "MALDA",
+  MUMBAI = "MUMBAI",
+  MUZAFFARPUR = "MUZAFFARPUR",
+  PATNA = "PATNA",
+  PRAYAGRAJ = "PRAYAGRAJ",
+  RANCHI = "RANCHI",
+  SECUNDERABAD = "SECUNDERABAD",
+  SILIGURI = "SILIGURI",
+  THIRUVANANTHAPURAM = "THIRUVANANTHAPURAM",
+  AHMEDABAD = "AHMEDABAD",
+  AJMER = "AJMER",
+  BANGALORE = "BANGALORE",
+  BHOPAL = "BHOPAL",
+  BHUBANESWAR = "BHUBANESWAR",
+  BILASPUR = "BILASPUR",
+  CHANDIGARH = "CHANDIGARH",
+  CHENNAI = "CHENNAI",
+  GORAKHPUR = "GORAKHPUR",
+  GUWAHATI = "GUWAHATI"
 }
 
 export interface ExamData {
@@ -82,8 +100,7 @@ export enum Gender {
 export const FormSchema = z.object({
   answerKeyUrl: z.string().url(),
   category: z.nativeEnum(Category),
-  area: z.nativeEnum(Areas),
-  state: z.nativeEnum(States),
+  zone: z.nativeEnum(Zone),
   gender: z.nativeEnum(Gender),
   phone: z
     .string()
@@ -92,6 +109,7 @@ export const FormSchema = z.object({
     .refine((val) => !val || /^\d{10}$/.test(val), {
       message: "Phone number must be 10 digits",
     }),
+  HorizontalCat: z.nativeEnum(HorizontalCat)  
 });
 
 export interface Question {
@@ -156,7 +174,6 @@ export interface StudentProps {
     shiftRank: string;
     genderRank: string;
     areaRank: string;
-    stateRank: string;
     overAllNormalisedRank: number;
     categoryNormalisedRank: number;
     shiftNormalisedRank: number;
