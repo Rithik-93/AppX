@@ -1,6 +1,6 @@
-import { Areas, Category, ExamData, Gender, States } from "@/app/schema/types";
+import { Category, Gender, Zone } from "@/app/schema/types";
 import prisma from "../../../../prisma/src";
-import { Domain, Exam, User } from "@prisma/client";
+import { Domain, Exam, HorizontalCat, User } from "@prisma/client";
 
 export async function findExamAttempt(
   domain: Domain,
@@ -22,35 +22,35 @@ export async function findExamAttempt(
 
 export async function createAttempt(
   user: User,
-  exam: Exam,
-  examData: ExamData,
+  exam: { id: string },
+  rollNumber: string,
   totalMarks: number,
-  state: States,
   testTime: string,
   category: Category,
   domain: Domain,
   testDate: string,
   gender: Gender,
-  area: Areas
+  zone: Zone,
+  HorizontalCat: HorizontalCat
 ) {
   try {
-    console.log("hereee*******************************ee",
-      user.id,exam.id,examData.candidateInfo["Roll Number"], totalMarks,state,testTime,category,domain,testDate,gender,area
-    );
+    // console.log("hereee*******************************ee",
+    //   user.id,exam.id,rollNumber, totalMarks,state,testTime,category,domain,testDate,gender,area
+    // );
     
     const attempt = await prisma.examAttempt.create({
       data: {
         userId: user?.id,
         examId: exam.id,
-        rollNumber: examData.candidateInfo["Roll Number"],
+        rollNumber,
         totalMarks,
-        state,
         shiftTime: testTime,
         category: category,
         domain: domain as Domain,
         attemptDate: testDate,
         gender: gender,
-        area,
+        zone,
+        HorizontalCat
       },
     });
 

@@ -3,14 +3,15 @@
 import prisma from "../../../../prisma/src";
 import { Category, Domain } from "@prisma/client";
 import { domain } from "@/app/config/config";
-import { Areas, Gender } from "@/app/schema/types";
+import { Gender, Zone } from "@/app/schema/types";
 
 export async function getAverageMarks(
+  subject: string,
   examId: string,
   category: string,
   shiftTime: string,
   gender: Gender,
-  area: Areas
+  zone: Zone
 ) {
   // The domain variable seems to be used but not defined in the function parameters
   // Assuming it's defined elsewhere in the scope, but you may need to add it as a parameter
@@ -21,6 +22,9 @@ export async function getAverageMarks(
     where: {
       examId,
       domain: domain as Domain,
+      exam: {
+        name: subject
+      }
     },
     _avg: {
       totalMarks: true,
@@ -34,6 +38,9 @@ export async function getAverageMarks(
           examId,
           domain: domain as Domain,
           category: category as Category,
+          exam: {
+            name: subject
+          }
         },
         _avg: {
           totalMarks: true,
@@ -45,6 +52,9 @@ export async function getAverageMarks(
           examId,
           domain: domain as Domain,
           shiftTime,
+          exam: {
+            name: subject
+          }
         },
         _avg: {
           totalMarks: true,
@@ -57,6 +67,9 @@ export async function getAverageMarks(
           domain: domain as Domain,
           shiftTime,
           gender,
+          exam: {
+            name: subject
+          }
         },
         _avg: {
           totalMarks: true,
@@ -68,7 +81,10 @@ export async function getAverageMarks(
           examId,
           domain: domain as Domain,
           shiftTime,
-          area,
+          zone,
+          exam: {
+            name: subject
+          }
         },
         _avg: {
           totalMarks: true,

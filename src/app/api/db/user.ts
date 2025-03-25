@@ -1,54 +1,77 @@
-import { Domain, Exam } from "@prisma/client";
-import prisma from "../../../../prisma/src";
-import { Areas, Category, ExamData, Gender } from "@/app/schema/types";
+'use server'
 
-export async function findUser(rollNumber: string, domain: Domain, exam: Exam) {
+import { Domain, Zone } from "@prisma/client";
+import prisma from "../../../../prisma/src";
+import { Category, ExamData, Gender } from "@/app/schema/types";
+
+export async function findUser(rollNumber: string, domain: Domain, examId: string) {
   try {
+    console.log('Searching for user with params:', { 
+      rollNumber, 
+      domain, 
+      examId 
+    });
+    
     const user = await prisma.user.findFirst({
       where: {
         examAttempts: {
           some: {
             rollNumber,
-            domain: domain as Domain,
-            examId: exam.id,
-          },
+            domain,
+            examId,
+          },  
         },
       },
     });
-  console.error('founder user', user);
+
+    console.log('Query result:', user);
+
+    if (!user) {
+      console.log('No user found with these parameters');
+      return null;
+    }
   
+    console.log('Found user', user);
     return user;
   } catch(e) {
-    console.error(e);
-    return
+    // console.error('Error finding user:', e);
+    return null;
   }
 }
 
 export async function createUser(
   examData: ExamData,
   category: Category,
-  area: Areas,
+  zone: Zone,
   gender: Gender,
   domain: Domain,
   phone: string
 ) {
   try {
+    console.log('Creating new user with data:', { 
+      name: examData.candidateInfo["Applicant Name"],
+      category,
+      zone,
+      gender,
+      domain,
+      phone 
+    });
+    
     const user = await prisma.user.create({
       data: {
-        name: examData.candidateInfo["Candidate Name"] || "Unknown Candidate",
+        name: examData.candidateInfo["Applicant Name"],
         category,
-        area,
+        zone,
         gender,
         domain: domain as Domain,
         phone
       },
     });
-    console.error('user createdddddddd', user);
     
-  
+    console.log('User created successfully:', user);
     return user;
   } catch(e) {
-    console.error(e);
-    return
+    // console.error('Error creating user:', e);
+    return null; // Return null instead of undefined
   }
 }

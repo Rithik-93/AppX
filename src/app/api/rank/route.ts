@@ -12,7 +12,7 @@ import { calculateMarks } from "@/app/utils/calculateMarks";
 import { calculateQuestionStats } from "@/app/utils/calculateQuestionStats";
 import { findExam } from "../db/exam";
 import { createAttempt, findExamAttempt } from "../db/examAttempt";
-import { createUser, findUser } from "../db/user";
+// import { createUser, findUser } from "../db/user";
 import { getUserNormalizedRanks } from "../normalisedRanks/overAllRank";
 
 export async function POST(req: NextRequest) {
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { answerKeyUrl, category, area, gender, state, phone } = data.data;
+    const { answerKeyUrl, category, zone, gender, phone, HorizontalCat } = data.data;
 
     let response;
 
@@ -72,11 +72,11 @@ export async function POST(req: NextRequest) {
       }
     });
 
-    const testCenter = examData.candidateInfo["Venue Name"];
+    const testCenter = examData.candidateInfo["Centre Name"];
     const testDate = examData.candidateInfo["Exam Date"];
     const testTime = examData.candidateInfo["Exam Time"];
-    const subject = examData.candidateInfo.Subject;
-    const rollNumber = examData.candidateInfo["Roll Number"] || "N/A";
+    const subject = examData.candidateInfo["Exam Name"];
+    const rollNumber = examData.candidateInfo["Roll No"] || "N/A";
     const extractQuestionData = (): Question[] => {
       const questions: Question[] = [];
 
@@ -117,6 +117,8 @@ export async function POST(req: NextRequest) {
     };
 
     examData.questions = extractQuestionData();
+    console.error(examData.candidateInfo, '%%%%%%%%%%%%');
+
 
     if (Object.keys(examData.candidateInfo).length === 0) {
       return NextResponse.json(
@@ -130,12 +132,12 @@ export async function POST(req: NextRequest) {
       return match ? match[1] : " ";
     };
 
-    // console.error(testTime,testCenter,testDate,examData,'-------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
-    
+    console.error(subject, testDate, '-------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
 
-    const exam = await findExam(testDate, examData, subject);
 
-    // console.error("exam------", exam);
+    const exam = await findExam(testDate, testTime, subject);
+
+    console.error("exam------", exam);
 
     if (!exam) {
       return NextResponse.json(
@@ -154,14 +156,15 @@ export async function POST(req: NextRequest) {
       exam.negativeMarking
     );
 
-    // console.error(
-    //   "----------------------------------------------------",
-    //   domain
-    // );
+    console.error(
+      "----------------------------------------------------",
+      domain
+    );
     //@ts-ignore
     const attempt = await findExamAttempt(domain as Domain, rollNumber, exam);
 
-    // console.error("attempt------", attempt);
+    console.error("attempt------", attempt);
+    // var user: User;
 
     if (attempt) {
       await prisma.examAttempt.update({
@@ -173,31 +176,41 @@ export async function POST(req: NextRequest) {
           },
         },
         data: {
-          state,
+          zone,
           category: category,
           gender: gender,
           totalMarks,
         },
       });
 
-      // console.error("not reaching||||||||||||||||||||||||||||");
+      console.log("not reaching||||||||||||||||||||||||||||");
+      console.log(
+        '1*****'
+      )
 
-      let user = await prisma.user.findFirst({
-        where: {
-          examAttempts: {
-            some: {
-              rollNumber,
-              examId: exam.id,
-              domain: domain as Domain,
+      // try {
+        console.log("Query parameters being used for findFirst:");
+        console.log("rollNumber:", rollNumber);
+        console.log("examId:", exam?.id);
+        console.log("domain:", domain);
+        let user;
+
+        user = await prisma.user.findFirst({
+          where: {
+            examAttempts: {
+              some: {
+                rollNumber,
+                examId: exam?.id,
+                domain: domain as Domain,
+              },
             },
           },
-        },
-      });
+        });
 
-      // console.error("User after upsert:", user);
+      console.log("User after upsert:", user);
 
       if (user) {
-        // console.error("inside");
+        console.error("inside7777777777777777777777777777777777777777777777777777777777777");
 
         user = await prisma.user.update({
           where: {
@@ -205,20 +218,20 @@ export async function POST(req: NextRequest) {
             domain: domain as Domain,
           },
           data: {
-            area,
+            zone,
             category,
             gender,
             phone,
           },
         });
       } else {
-        // console.error("else++++++++++++++");
+        console.error("else++++++++++++++");
         user = await prisma.user.create({
           data: {
             name:
-              examData.candidateInfo["Candidate Name"] || "Unknown Candidate",
+              examData.candidateInfo["Applicant Name"] || "Unknown Candidate",
             category,
-            area,
+            zone,
             gender,
             domain: domain as Domain,
             phone,
@@ -226,145 +239,131 @@ export async function POST(req: NextRequest) {
         });
       }
     } else {
-      // console.log(
-      //   rollNumber,
-      //   domain as Domain,
-      //   exam,
-      //   "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-      // );
+      console.log(
+        rollNumber,
+        domain as Domain,
+        exam,
+        "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+      );
+      let user;
 
-      // @ts-ignore
-      let user = await findUser(rollNumber, domain as Domain, exam);
+      user = await prisma.user.findFirst({
+        where: {
+          examAttempts: {
+            some: {
+              rollNumber,
+              examId: exam?.id,
+              domain: domain as Domain,
+            },
+          },
+        },
+      });
 
-      // console.error("user------", user);
+      if (user) {
+        console.error("inside7777777777777777777777777777777777777777777777777777777777777");
 
-      // Create the user if it doesn't exist
-      if (!user) {
-        // console.error("creating userrrrrrrrrr");
-
-        user = await createUser(
-          examData,
-          category,
-          area,
-          gender,
-          domain as Domain,
-          phone!
-        );
-      } else {
-        // Update existing user if found
-        // console.error("reached hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-        user = await prisma.user.update({
+        await prisma.user.update({
           where: {
             id: user.id,
             domain: domain as Domain,
           },
           data: {
+            zone,
             category,
             gender,
-            area,
+            phone,
+          },
+        });
+      } else {
+        console.error("else++++++++++++++");
+        user = await prisma.user.create({
+          data: {
+            name:
+              examData.candidateInfo["Applicant Name"] || "Unknown Candidate",
+            category,
+            zone,
+            gender,
+            domain: domain as Domain,
             phone,
           },
         });
       }
+      console.log('User after creation/update:', user);
+      const examAttempt = await createAttempt(
+        user,
+        exam,
+        rollNumber,
+        totalMarks,
+        testTime,
+        category,
+        domain as Domain,
+        testDate,
+        gender,
+        zone,
+        HorizontalCat
+      );
 
-      // console.error("user------", user);
-
-      // This line needs to use the newly created user, which might be null
-      // if the createUser function failed
-      // if (user) {
-      // console.error("gotchaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-      
-        const examAttempt = await createAttempt(
-          //@ts-ignore
-          user,
-          //@ts-ignore
-          exam,
-          examData,
-          totalMarks,
-          state,
-          testTime,
-          category,
-          domain as Domain,
-          testDate,
-          gender,
-          area
+      if (!examAttempt || 'error' in examAttempt) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: examAttempt?.message || "Failed to create exam attempt",
+          },
+          { status: 400 }
         );
-        // console.error("gotchaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        // aaaaaaaaddddddddddddddddd");
+      }
 
-        if (!examAttempt) {
-          // Handle the error case
-          return NextResponse.json(
-            {
-              success: false,
-              // @ts-ignore
-              message: examAttempt?.message || "Failed to create exam attempt",
+      // Create questions and answers
+      await Promise.all(
+        examData.questions.map(async (question) => {
+          const questionId = extractQuestionId(question.question);
+          const correctOption = question.correctAnswer.charAt(0);
+
+          await prisma.question.upsert({
+            where: { questionId: questionId },
+            update: { correctOption: correctOption },
+            create: {
+              questionId: questionId,
+              correctOption: correctOption,
+              examId: exam.id,
             },
-            { status: 400 }
-          );
-        }
+          });
 
-        // console.error("Exam Attempt:", examAttempt);
+          const chosenOption =
+            question.chosenAnswer !== "--"
+              ? question.chosenAnswer
+              : "Unanswered";
 
-        if (examAttempt) {
-          await Promise.all(
-            examData.questions.map(async (question) => {
-              const questionId = extractQuestionId(question.question);
-              const correctOption = question.correctAnswer.charAt(0);
-              // console.log(questionId, correctOption, exam.id);
-
-              await prisma.question.upsert({
-                where: { questionId: questionId },
-                update: { correctOption: correctOption },
-                create: {
-                  questionId: questionId,
-                  correctOption: correctOption,
-                  examId: exam.id,
-                },
-              });
-
-              const chosenOption =
-                question.chosenAnswer !== "--"
-                  ? question.chosenAnswer
-                  : "Unanswered";
-
-              await prisma.answer.createMany({
-                data: [
-                  {
-                    //@ts-ignore
-                    userId: user.id,
-                    questionId: questionId,
-                    chosenOption: chosenOption,
-                    isCorrect:
-                      chosenOption === question.correctAnswer.charAt(0),
-                    //@ts-ignore
-                    examAttemptId: examAttempt.id,
-                  },
-                ],
-              });
-            })
-          );
-        }
-      // } else {
-        console.error("Failed to create user");
-      // }
+          await prisma.answer.createMany({
+            data: [
+              {
+                userId: user.id,
+                questionId: questionId,
+                chosenOption: chosenOption,
+                isCorrect:
+                  chosenOption === question.correctAnswer.charAt(0),
+                examAttemptId: examAttempt.id,
+              },
+            ],
+          });
+        })
+      );
     }
-  //  console.log("line 341111111111111111111111111111111111");
-   
+    //  console.log("line 341111111111111111111111111111111111");
+
     const userRank = await getRankForUser(
+      subject,
       exam.id,
-      rollNumber,
-      state,
-      gender,
-      area
+      rollNumber
     );
 
     const avgMarks = await getAverageMarks(
+      subject,
       exam.id,
       category,
       testTime,
       gender,
-      area
+      zone
     );
 
     const questionStats = calculateQuestionStats(
@@ -372,55 +371,18 @@ export async function POST(req: NextRequest) {
       totalMarks
     );
 
-    const topRankers = await getMarksAboveInfo();
+    const topRankers = await getMarksAboveInfo(subject);
 
     const userNormalisedRank = await getUserNormalizedRanks(
       exam.id,
       rollNumber,
       gender,
-      area,
+      zone,
       domain as Domain
     );
 
-    // console.log(
-    //   JSON.stringify(
-    //     {
-    //       fullName:
-    //         examData.candidateInfo["Candidate Name"] || "Unknown Candidate",
-    //       category,
-    //       testDate,
-    //       testTime,
-    //       rollNumber,
-    //       subject,
-    //       testCenter,
-    //       ranks: {
-    //         overallRank: userRank.overallRank,
-    //         categoryRank: userRank.categoryRank,
-    //         shiftRank: userRank.shiftRank,
-    //         genderRank: userRank.genderRank,
-    //         areaRank: userRank.areaRank,
-    //         stateRank: userRank.stateRank,
-    //         overAllNormalisedRank: userNormalisedRank?.ranks.overall,
-    //         categoryNormalisedRank: userNormalisedRank?.ranks.category,
-    //         shiftNormalisedRank: userNormalisedRank?.ranks.shift,
-    //       },
-    //       avgMarks,
-    //       stats: {
-    //         attempted: questionStats.attempted,
-    //         notAttempted: questionStats.notAttempted,
-    //         correct: questionStats.correct,
-    //         wrong: questionStats.wrong,
-    //         totalMarks: questionStats.totalMarks,
-    //       },
-    //       topRankers,
-    //     },
-    //     null,
-    //     2
-    //   )
-    // );
-
     return NextResponse.json({
-      fullName: examData.candidateInfo["Candidate Name"] || "Unknown Candidate",
+      fullName: examData.candidateInfo["Applicant Name"] || "Unknown Candidate",
       category,
       testDate,
       testTime,
@@ -433,7 +395,7 @@ export async function POST(req: NextRequest) {
         shiftRank: userRank.shiftRank,
         genderRank: userRank.genderRank,
         areaRank: userRank.areaRank,
-        stateRank: userRank.stateRank,
+        // stateRank: userRank.stateRank,
         overAllNormalisedRank: userNormalisedRank?.ranks.overall,
         categoryNormalisedRank: userNormalisedRank?.ranks.category,
         shiftNormalisedRank: userNormalisedRank?.ranks.shift,
@@ -472,3 +434,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+

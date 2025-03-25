@@ -31,7 +31,7 @@ const DownloadCard = forwardRef<HTMLDivElement, ScoreCardProps>(({
             <div className="relative z-10 space-y-6">
                 <div className="text-purple-900 text-primary-foreground p-4 -mx-6 -mt-6 rounded-t-lg">
                     <h1 className="text-xl font-semibold">
-                        Constable GD Examination 2025
+                    Recruitment of Constable Executive in Railway Protection Force and Railway Protection Special Force
                     </h1>
                 </div>
 
@@ -64,7 +64,7 @@ const DownloadCard = forwardRef<HTMLDivElement, ScoreCardProps>(({
                     </TableHeader>
                     <TableBody>
                         <TableRow>
-                            <TableCell>Constable GD</TableCell>
+                            <TableCell>Recruitment of Constable</TableCell>
                             <TableCell className="text-center">{subjectData.attempted}</TableCell>
                             <TableCell className="text-center">{subjectData.notAttempted}</TableCell>
                             <TableCell className="text-center">{subjectData.correct}</TableCell>

@@ -1,6 +1,6 @@
 'use server'
 
-import { Domain, ExamAttempt, Gender, Area } from "@prisma/client";
+import { Domain, ExamAttempt, Gender, Zone } from "@prisma/client";
 import prisma from "../../../../prisma/src";
 
 async function calculateNormalizedRanks(examId: string, domain: string) {
@@ -134,7 +134,7 @@ async function calculateNormalizedRanks(examId: string, domain: string) {
         const { Mt, Miq } = shiftData;
         const category = user?.category || "GENERAL";
         const gender = user?.gender;
-        const area = user?.area;
+        const area = user?.zone;
 
         // Check for division by zero
         if (Mt === Miq) {
@@ -186,7 +186,7 @@ async function calculateNormalizedRanks(examId: string, domain: string) {
           normalizedMark: attempt.totalMarks, // Fallback to original marks
           category: attempt.user?.category || "GENERAL",
           gender: attempt.user?.gender,
-          area: attempt.user?.area,
+          area: attempt.user?.zone,
         };
       }
     });
@@ -249,7 +249,7 @@ async function calculateNormalizedRanks(examId: string, domain: string) {
     }
 
     // Calculate area-specific ranks
-    const areaRanks = new Map<Area, number>();
+    const areaRanks = new Map<Zone, number>();
     for (const result of rankedResults) {
       const { area } = result;
       if (!area) continue;
@@ -271,7 +271,7 @@ async function getUserNormalizedRanks(
   examId: string,
   rollNumber: string,
   candidateGender: Gender,
-  candidateArea: Area,
+  candidateZone: Zone,
   domain: Domain
 ) {
   try {
@@ -310,11 +310,11 @@ async function getUserNormalizedRanks(
     }
 
     // If area was specified and doesn't match what we found, recalculate
-    if (candidateArea && userRanks.area !== candidateArea) {
+    if (candidateZone && userRanks.area !== candidateZone) {
       areaRank = calculateAreaRank(
         allNormalizedRanks,
         rollNumber,
-        candidateArea
+        candidateZone
       );
     }
 
@@ -324,7 +324,7 @@ async function getUserNormalizedRanks(
       name: userRanks.name,
       category: userRanks.category,
       gender: userRanks.gender || candidateGender,
-      area: userRanks.area || candidateArea,
+      area: userRanks.area || candidateZone,
       shiftTime: userRanks.shiftTime,
       totalMarks: userRanks.originalMarks,
       normalizedMarks: userRanks.normalizedMarks,
@@ -375,16 +375,16 @@ function calculateGenderRank(
 function calculateAreaRank(
   allNormalizedRanks: any[],
   userRollNumber: string,
-  area: Area
+  zone: Zone
 ): number {
   try {
     // Filter candidates by area
     const sameAreaCandidates = allNormalizedRanks.filter(
-      (rank) => rank.area === area
+      (rank) => rank.zone === zone
     );
 
     if (sameAreaCandidates.length === 0) {
-      console.warn(`No candidates found from area ${area}`);
+      console.warn(`No candidates found from area ${zone}`);
       return 0;
     }
 

@@ -26,7 +26,8 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 import { RankCard } from "@/components/RankCard"
-import { Areas, Category, FormSchema, Gender, States, StudentProps } from "@/app/schema/types"
+import { Zone, Category, FormSchema, Gender, StudentProps } from "@/app/schema/types"
+import { HorizontalCat } from "@prisma/client"
 
 export default function SubmitForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,8 +48,8 @@ export default function SubmitForm() {
         answerKeyUrl: values.answerKeyUrl,
         category: values.category,
         gender: values.gender,
-        area: values.area,
-        state: values.state,
+        zone: values.zone,
+        HorizontalCat: values.HorizontalCat,
         phone: values.phone
       });
       setExamData(data.data)
@@ -104,7 +105,6 @@ export default function SubmitForm() {
                             <SelectItem value={Category.EWS}>EWS</SelectItem>
                             <SelectItem value={Category.SC}>SC</SelectItem>
                             <SelectItem value={Category.ST}>ST</SelectItem>
-                            <SelectItem value={Category.ExSM}>EX SM</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -113,10 +113,10 @@ export default function SubmitForm() {
                   />
                   <FormField
                     control={form.control}
-                    name="area"
+                    name="zone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Area</FormLabel>
+                        <FormLabel>Zone</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
@@ -124,15 +124,16 @@ export default function SubmitForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value={Areas.General}>General</SelectItem>
-                            <SelectItem value={Areas.NexalArea}>Naxal area</SelectItem>
-                            <SelectItem value={Areas.BoaderArea}>Border Area</SelectItem>
+                            {Object.values(Zone).map((zone) => (
+                              <SelectItem key={zone} value={zone}>{zone}</SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+
                   <FormField
                     control={form.control}
                     name="gender"
@@ -156,61 +157,27 @@ export default function SubmitForm() {
                   />
                   <FormField
                     control={form.control}
-                    name="state"
+                    name="HorizontalCat"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>State</FormLabel>
-                        <Select required onValueChange={field.onChange}>
+                        <FormLabel>Horizontal Category</FormLabel>
+                        <Select required onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Select State" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value={States.ARUNACHALPRADESH}>Arunachal Pradesh</SelectItem>
-                            <SelectItem value={States.ASSAM}>Assam</SelectItem>
-                            <SelectItem value={States.BIHAR}>Bihar</SelectItem>
-                            <SelectItem value={States.CHHATTISGARH}>Chhattisgarh</SelectItem>
-                            <SelectItem value={States.GOA}>Goa</SelectItem>
-                            <SelectItem value={States.GUJARAT}>Gujarat</SelectItem>
-                            <SelectItem value={States.HARYANA}>Haryana</SelectItem>
-                            <SelectItem value={States.HIMACHALPRADESH}>Himachal Pradesh</SelectItem>
-                            <SelectItem value={States.JHARKHAND}>Jharkhand</SelectItem>
-                            <SelectItem value={States.KARNATAKA}>Karnataka</SelectItem>
-                            <SelectItem value={States.KERALA}>Kerala</SelectItem>
-                            <SelectItem value={States.MADHYAPRADESH}>Madhya Pradesh</SelectItem>
-                            <SelectItem value={States.MAHARASHTRA}>Maharashtra</SelectItem>
-                            <SelectItem value={States.MANIPUR}>Manipur</SelectItem>
-                            <SelectItem value={States.MEGHALAYA}>Meghalaya</SelectItem>
-                            <SelectItem value={States.MIZORAM}>Mizoram</SelectItem>
-                            <SelectItem value={States.NAGALAND}>Nagaland</SelectItem>
-                            <SelectItem value={States.ODISHA}>Odisha</SelectItem>
-                            <SelectItem value={States.PUNJAB}>Punjab</SelectItem>
-                            <SelectItem value={States.RAJASTHAN}>Rajasthan</SelectItem>
-                            <SelectItem value={States.SIKKIM}>Sikkim</SelectItem>
-                            <SelectItem value={States.TAMILNADU}>Tamil Nadu</SelectItem>
-                            <SelectItem value={States.TELANGANA}>Telangana</SelectItem>
-                            <SelectItem value={States.ANDHRAPRADESH}>Andhra Pradesh</SelectItem>
-                            <SelectItem value={States.TRIPURA}>Tripura</SelectItem>
-                            <SelectItem value={States.UTTARPRADESH}>Uttar Pradesh</SelectItem>
-                            <SelectItem value={States.UTTARAKHAND}>Uttarakhand</SelectItem>
-                            <SelectItem value={States.WESTBENGAL}>West Bengal</SelectItem>
-                            <SelectItem value={States.ANDAMAN_AND_NICOBAR_ISLANDS}>Andaman and Nicobar Islands</SelectItem>
-                            <SelectItem value={States.CHANDIGARH}>Chandigarh</SelectItem>
-                            <SelectItem value={States.DELHI}>Delhi</SelectItem>
-                            <SelectItem value={States.LAKSHADWEEP}>Lakshadweep</SelectItem>
-                            <SelectItem value={States.PUDUCHERRY}>Puducherry</SelectItem>
-                            <SelectItem value={States.LADAKH}>Ladakh</SelectItem>
-                            <SelectItem value={States.JAMMU_AND_KASHMIR}>Jammu and Kashmir</SelectItem>
-                            <SelectItem value={States.DADRA_AND_NAGAR_HAVELI_AND_DAMAN_AND_DIU}>
-                              Dadra and Nagar Haveli and Daman and Diu
-                            </SelectItem>
+                            {Object.values(HorizontalCat).map((cat) => (
+                              <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+
                   <FormField
                     control={form.control}
                     name="phone"
