@@ -108,9 +108,11 @@ enum HorizontalCat {
   VH
   HH
   OtherPWD
+  None
 }
 
 enum Zone {
+  NONE
   JAMMU_SRINAGAR
   KOLKATA
   MALDA
