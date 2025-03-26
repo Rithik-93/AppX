@@ -164,7 +164,7 @@ export default function SubmitForm() {
                         <Select required onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select State" />
+                              <SelectValue placeholder="Select horizontal category" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>

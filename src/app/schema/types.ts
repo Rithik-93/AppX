@@ -64,6 +64,7 @@ export enum States {
 }
 
 export enum Zone {
+  NONE = "NONE",
   JAMMU_SRINAGAR = "JAMMU_SRINAGAR",
   KOLKATA = "KOLKATA",
   MALDA = "MALDA",
